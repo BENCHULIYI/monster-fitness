@@ -362,12 +362,14 @@ body {
   padding-bottom: env(safe-area-inset-bottom, 0px);
   flex-shrink:0;
   max-width:480px; margin:0 auto; width:100%;
+  box-sizing:border-box;
 }
 .nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  flex:1; display:flex; flex-direction:column; align-items:center;
   cursor:pointer; color:var(--text-secondary); transition:all 0.2s; position:relative;
   -webkit-tap-highlight-color:transparent;
-  padding-top: 14px;
+  height:100%;
+  justify-content:center !important;
 }
 .nav-item.active { color:var(--text-green); }
 .nav-item.active::before {
