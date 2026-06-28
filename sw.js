@@ -1,5 +1,5 @@
 // Service Worker for Monster Fitness PWA
-const CACHE_NAME = 'monster-fitness-v4';
+const CACHE_NAME = 'monster-fitness-v5';
 const urlsToCache = [
   './',
   './index.html',
