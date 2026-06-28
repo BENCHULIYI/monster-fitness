@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="greenGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff6a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00cc55;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00ff6a;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#00ff6a;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="100" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle green glow in center -->
+  <circle cx="256" cy="256" r="180" fill="url(#centerGlow)"/>
+  
+  <!-- Outer ring (subtle) -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="url(#greenGlow)" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Main icon: Stylized monster claw / dumbbell hybrid -->
+  <!-- Left claw -->
+  <g filter="url(#glow)">
+    <path d="M 160 280 Q 140 240 150 200 Q 160 180 180 190 Q 190 200 185 220 Q 190 250 200 270" 
+          fill="url(#greenGlow)" opacity="0.9"/>
+    <!-- Claw fingers -->
+    <ellipse cx="155" cy="195" rx="12" ry="30" fill="url(#greenGlow)" transform="rotate(-15 155 195)" opacity="0.8"/>
+    <ellipse cx="165" cy="185" rx="12" ry="30" fill="url(#greenGlow)" transform="rotate(-25 165 185)" opacity="0.8"/>
+    <ellipse cx="178" cy="190" rx="12" ry="28" fill="url(#greenGlow)" transform="rotate(-35 178 190)" opacity="0.8"/>
+  </g>
+  
+  <!-- Right claw -->
+  <g filter="url(#glow)">
+    <path d="M 352 280 Q 372 240 362 200 Q 352 180 332 190 Q 322 200 327 220 Q 322 250 312 270" 
+          fill="url(#greenGlow)" opacity="0.9"/>
+    <!-- Claw fingers -->
+    <ellipse cx="357" cy="195" rx="12" ry="30" fill="url(#greenGlow)" transform="rotate(15 357 195)" opacity="0.8"/>
+    <ellipse cx="347" cy="185" rx="12" ry="30" fill="url(#greenGlow)" transform="rotate(25 347 185)" opacity="0.8"/>
+    <ellipse cx="334" cy="190" rx="12" ry="28" fill="url(#greenGlow)" transform="rotate(35 334 190)" opacity="0.8"/>
+  </g>
+  
+  <!-- Center lightning bolt (power symbol) -->
+  <g filter="url(#glow)">
+    <path d="M 245 230 L 275 230 L 260 270 L 280 270 L 240 330 L 260 280 L 245 280 Z" 
+          fill="url(#greenGlow)" stroke="#0a0a0a" stroke-width="2" opacity="0.95"/>
+  </g>
+  
+  <!-- Top text: 怪兽 -->
+  <text x="256" y="150" 
+        font-family="Arial Black, Microsoft YaHei, sans-serif" 
+        font-size="72" 
+        font-weight="900" 
+        fill="url(#greenGlow)" 
+        text-anchor="middle"
+        filter="url(#glow)"
+        opacity="0.95">怪兽</text>
+  
+  <!-- Bottom text: 训练 -->
+  <text x="256" y="420" 
+        font-family="Arial Black, Microsoft YaHei, sans-serif" 
+        font-size="68" 
+        font-weight="900" 
+        fill="url(#greenGlow)" 
+        text-anchor="middle"
+        filter="url(#glow)"
+        opacity="0.9">训练</text>
+  
+  <!-- Decorative line -->
+  <line x1="120" y1="350" x2="392" y2="350" stroke="url(#greenGlow)" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Green glow effect on edges -->
+  <rect width="512" height="512" rx="100" fill="none" stroke="#00ff6a" stroke-width="2" opacity="0.2"/>
+</svg>

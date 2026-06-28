@@ -21,55 +21,32 @@
   --text-orange: #ff6a00;
   --glow-green: 0 0 10px rgba(0,255,106,0.3);
   --glow-orange: 0 0 10px rgba(255,106,0,0.3);
-  --nav-height: 65px;
+  --nav-height: 60px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; height:100dvh; overflow:hidden; }
+html,body { height:100%; overflow:hidden; }
 body {
   font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
   background: var(--bg-primary); color: var(--text-primary);
-  padding-top: var(--safe-top);
+  padding-top: var(--safe-top); padding-bottom: var(--safe-bottom);
 }
 /* ===== App Container ===== */
-.app-container { display:flex; flex-direction:column; height:100dvh; max-width:480px; margin:0 auto; position:relative; }
+.app-container { display:flex; flex-direction:column; height:100%; max-width:480px; margin:0 auto; position:relative; }
 /* ===== Header ===== */
 .app-header {
-  padding: 10px 16px 8px; background: var(--bg-primary);
-  border-bottom: 1px solid #1a1a1a;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  padding: 12px 16px 8px; background: var(--bg-primary);
+  border-bottom: 1px solid #1a1a1a; display:flex; align-items:center; justify-content:space-between;
   position: sticky; top: 0; z-index: 100;
 }
-.header-brand {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-}
-.header-icon {
-  font-size: 30px;
-  line-height: 1;
-  color: var(--text-green);
-  filter: drop-shadow(0 0 8px rgba(0,255,106,0.7));
-}
-.app-title { font-size: 20px; font-weight: 700; color: var(--text-green); text-shadow: 0 0 10px rgba(0,255,106,0.5); letter-spacing: 1.5px; line-height: 1.2; }
-.app-subtitle-en { font-size: 10px; color: #666; letter-spacing: 3px; margin-top: 2px; line-height: 1; }
-.app-subtitle { font-size: 10px; color: var(--text-secondary); white-space: nowrap; line-height: 1; }
-.header-right { display: flex; gap: 12px; align-items: center; }
+.app-title { font-size:18px; font-weight:700; color:var(--text-green); text-shadow:0 0 10px rgba(0,255,106,0.5); letter-spacing:1px; }
+.app-subtitle { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+.header-right { display:flex; gap:12px; align-items:center; }
 .header-btn { background:none; border:none; color:var(--text-green); cursor:pointer; padding:4px; }
 /* ===== Pages ===== */
-.page { display:none; }
-.page.active {
-  display:flex;
-  flex-direction:column;
-  flex:1 1 auto;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding-bottom: 140px !important; /* 增加底部间距，确保最后一个项目不被导航栏遮挡 */
-  min-height:0; /* 关键：允许flex子元素收缩并滚动 */
-}
+.page { display:none; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 0 20px; }
+.page.active { display:block; }
 /* ===== Onboarding ===== */
 .onboarding-page {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -115,41 +92,23 @@ body {
 .today-hero {
   background: linear-gradient(180deg, #0f1f0f 0%, var(--bg-primary) 100%);
   padding: 20px 16px 16px; margin-bottom: 4px;
-  position: relative;
-}
-.hero-slogan {
-  position: absolute;
-  right: 16px;
-  bottom: 10px;
-  font-size: 10px;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  letter-spacing: 1px;
 }
 .today-date { font-size:12px; color:var(--text-secondary); margin-bottom:4px; }
 .today-greeting { font-size:22px; font-weight:700; margin-bottom:4px; }
 .today-greeting span { color:var(--text-green); }
 .today-streak { display:inline-flex; align-items:center; gap:4px; background:rgba(0,255,106,0.1); border:1px solid rgba(0,255,106,0.3); border-radius:20px; padding:4px 12px; font-size:12px; color:var(--text-green); margin-top:8px; }
 /* Quick Stats Row */
-.quick-stats { display:flex; gap:8px; padding:0 16px; margin-top:12px; margin-bottom:6px; }
-
-.day-cycle-nav-top {
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px 4px 10px;
-  flex-wrap: wrap;
-}
+.quick-stats { display:flex; gap:8px; padding:0 16px; margin-bottom:16px; }
 .quick-stat {
-  flex:1; background:var(--bg-card); border-radius:16px; padding:14px 10px;
+  flex:1; background:var(--bg-card); border-radius:12px; padding:12px 10px;
   text-align:center; border:1px solid #222;
 }
-.quick-stat-value { font-size:24px; font-weight:800; color:var(--text-green); }
-.quick-stat-label { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+.quick-stat-value { font-size:20px; font-weight:700; color:var(--text-green); }
+.quick-stat-label { font-size:10px; color:var(--text-secondary); margin-top:2px; }
 /* Today Workout Card */
 .today-workout-card {
   margin:0 16px 16px; background:var(--bg-card); border-radius:16px;
-  border:1px solid #222;
+  border:1px solid #222; overflow:hidden;
 }
 .today-workout-header {
   padding:14px 16px; display:flex; justify-content:space-between; align-items:center;
@@ -195,21 +154,9 @@ body {
 /* ===== Plan Page ===== */
 .plan-header { padding:16px; display:flex; justify-content:space-between; align-items:center; }
 .plan-title { font-size:17px; font-weight:700; }
-.plan-equip-badge-clickable { cursor:pointer; transition:all 0.2s; }
-.plan-equip-badge-clickable:active { transform:scale(0.95); background:rgba(0,255,106,0.2); }
 .plan-equip-badge {
   background:rgba(0,255,106,0.1); border:1px solid rgba(0,255,106,0.3);
   color:var(--text-green); padding:4px 12px; border-radius:20px; font-size:12px;
-}
-.plan-goal-badge {
-  background:rgba(0,200,255,0.1); border:1px solid rgba(0,200,255,0.3);
-  color:#00c8ff; padding:4px 12px; border-radius:20px; font-size:12px;
-  cursor:pointer; transition:all 0.2s;
-}
-.plan-goal-badge:active { transform:scale(0.95); background:rgba(0,200,255,0.2); }
-.plan-cycle-badge {
-  background:rgba(255,106,0,0.1); border:1px solid rgba(255,106,0,0.3);
-  color:var(--text-orange); padding:4px 12px; border-radius:20px; font-size:12px;
 }
 .plan-day-card {
   margin:0 16px 12px; background:var(--bg-card); border-radius:14px;
@@ -358,18 +305,12 @@ body {
 /* ===== Bottom Nav ===== */
 .bottom-nav {
   display:flex; height:var(--nav-height); background:var(--bg-secondary);
-  border-top:1px solid #222;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  flex-shrink:0;
-  max-width:480px; margin:0 auto; width:100%;
-  box-sizing:border-box;
+  border-top:1px solid #222; padding-bottom:var(--safe-bottom);
 }
 .nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center;
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   cursor:pointer; color:var(--text-secondary); transition:all 0.2s; position:relative;
   -webkit-tap-highlight-color:transparent;
-  height:100%;
-  justify-content:center !important;
 }
 .nav-item.active { color:var(--text-green); }
 .nav-item.active::before {
@@ -377,9 +318,9 @@ body {
   width:30px; height:3px; background:var(--text-green); border-radius:0 0 3px 3px;
   box-shadow:var(--glow-green);
 }
-.nav-icon { font-size:24px; margin-bottom:3px; line-height:1; }
-.nav-icon svg { width:24px; height:24px; }
-.nav-label { font-size:11px; line-height:1.1; }
+.nav-icon { font-size:20px; margin-bottom:2px; }
+.nav-icon svg { width:20px; height:20px; }
+.nav-label { font-size:10px; }
 /* ===== Toast ===== */
 .toast {
   position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
@@ -411,311 +352,6 @@ body {
   padding:6px 16px; font-size:12px; font-weight:700; cursor:pointer;
 }
 .walk-btn.done { background:rgba(0,255,106,0.2); color:var(--text-green); }
-
-/* ===== Scrollbar ===== *//* The main claw SVG */
-.claw-svg {
-  width: 60%;
-  max-width: 280px;
-  height: auto;
-  /* Will be animated via stroke-dashoffset in JS */
-}
-
-/* Claw path scratch animation - drawn from top to bottom */
-@keyframes scratchDownLeft {
-  0%   { stroke-dashoffset: 1600; }
-  100% { stroke-dashoffset: 0; }
-}
-@keyframes scratchDownCenter {
-  0%   { stroke-dashoffset: 2000; }
-  100% { stroke-dashoffset: 0; }
-}
-@keyframes scratchDownRight {
-  0%   { stroke-dashoffset: 1550; }
-  100% { stroke-dashoffset: 0; }
-}
-
-#clawLeft {
-  animation: scratchDownLeft 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
-}
-#clawCenter {
-  animation: scratchDownCenter 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
-}
-#clawRight {
-  animation: scratchDownRight 0.52s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
-}
-
-/* Green flash when claws finish */
-.claw-flash {
-  position: absolute; top:0; left:0; width:100%; height:100%;
-  background: radial-gradient(ellipse at center, rgba(0,255,106,0.18) 0%, transparent 70%);
-  opacity: 0;
-  animation: flashIn 0.35s ease-out 1.4s forwards, flashOut 0.6s ease-in 1.85s forwards;
-  pointer-events: none;
-}
-@keyframes flashIn {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-@keyframes flashOut {
-  0%   { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* Subtle crack effect on bg */
-.claw-crack {
-  position: absolute; top:0; left:0; width:100%; height:100%;
-  pointer-events: none; opacity: 0;
-  animation: crackShow 1s ease-out 1.3s forwards;
-}
-.claw-crack::before {
-  content: '';
-  position: absolute; inset:0;
-  background:
-    radial-gradient(ellipse at 30% 50%, rgba(0,255,106,0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 50%, rgba(0,255,106,0.05) 0%, transparent 50%);
-}
-@keyframes crackShow {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-
-/* Claw logo appears after scratch - on top */
-.intro-claw-logo {
-  margin-bottom: 18px;
-  opacity: 0;
-  animation: logoPop 0.6s ease-out 1.6s forwards;
-  z-index: 10;
-  position: relative;
-}
-@keyframes logoPop {
-  0%   { opacity:0; transform:scale(0.5) translateY(15px); filter: blur(4px); }
-  70%  { opacity:1; transform:scale(1.08) translateY(-2px); filter: blur(0); }
-  100% { opacity:1; transform:scale(1) translateY(0); filter: blur(0); }
-}
-
-/* Title - on top of claws */
-.intro-title-wrap {
-  position: relative; z-index: 10;
-  text-align: center;
-  opacity: 0;
-  animation: titleReveal 0.7s ease-out 1.8s forwards;
-  margin-top: 0;
-}
-@keyframes titleReveal {
-  0%   { opacity:0; transform:translateY(20px) scale(0.96); filter:blur(4px); letter-spacing: 16px; }
-  70%  { opacity:1; filter:blur(0); }
-  100% { opacity:1; transform:translateY(0) scale(1); }
-}
-.intro-title {
-  font-size: 29px; font-weight: 900; color:#ddd; letter-spacing:7px;
-  text-shadow: 0 0 14px rgba(0,255,106,0.6), 0 0 40px rgba(0,255,106,0.25);
-}
-.intro-title span {
-  color:#00ff6a;
-  text-shadow: 0 0 20px rgba(0,255,106,1), 0 0 55px rgba(0,255,106,0.5);
-}
-
-/* ===== Ring Progress (Today Page) - New Layout ===== */
-.ring-progress-wrap {
-  position: relative;
-  width: 160px;
-  height: 160px;
-  margin: 8px auto 6px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.ring-progress-wrap:hover { transform: scale(1.03); }
-.ring-progress-wrap:active { transform: scale(0.97); }
-.ring-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-.ring-bg {
-  fill: none;
-  stroke: #222;
-  stroke-width: 7;
-}
-.ring-fill {
-  fill: none;
-  stroke: #00ff6a;
-  stroke-width: 7;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  filter: drop-shadow(0 0 6px rgba(0,255,106,0.4));
-}
-/* Stats INSIDE the ring */
-.ring-stats-below {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  pointer-events: none;
-  width: 110px;
-}
-.ring-pct-large {
-  font-size: 34px;
-  font-weight: 800;
-  color: #00ff6a;
-  line-height: 1;
-  text-shadow: 0 0 15px rgba(0,255,106,0.5);
-}
-.ring-sub-text {
-  font-size: 12px;
-  color: #888;
-  margin-top: 5px;
-  line-height: 1.2;
-}
-
-/* ===== Ring Stats (Stats Page) ===== */
-.ring-stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  padding: 16px;
-  background: var(--bg-card);
-  border-radius: 14px;
-  margin-bottom: 12px;
-}
-.ring-stat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-.ring-stat-svg-wrap {
-  position: relative;
-  width: 72px;
-  height: 72px;
-}
-.ring-stat-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-.ring-stat-bg {
-  fill: none;
-  stroke: #1a1a1a;
-  stroke-width: 7;
-}
-.ring-stat-fill {
-  fill: none;
-  stroke-width: 7;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.8s ease;
-}
-.ring-stat-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-.ring-stat-val {
-  font-size: 17px;
-  font-weight: 800;
-  color: #e0e0e0;
-  line-height: 1;
-}
-.ring-stat-label {
-  font-size: 11px;
-  color: #888;
-  text-align: center;
-  white-space: nowrap;
-}
-
-
-/* ===== Day 1-9 Cycle Navigation Pills (Top of page) ===== */
-.day-cycle-nav-top::-webkit-scrollbar { display: none; }
-.day-pill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 42px;
-  border-radius: 8px;
-  border: 1.2px solid #333;
-  background: #1a1a1a;
-  transition: all 0.25s ease;
-  cursor: pointer;
-  flex-shrink: 0;
-  padding: 2px 6px;
-}
-.day-pill .day-pill-label {
-  font-size: 9px;
-  color: #555;
-  line-height: 1.1;
-  margin-bottom: 1px;
-}
-.day-pill .day-pill-num {
-  font-size: 16px;
-  font-weight: 700;
-  color: #777;
-  line-height: 1;
-}
-.day-pill.active {
-  border-color: #00ff6a;
-  background: rgba(0,255,106,0.08);
-  box-shadow: 0 0 8px rgba(0,255,106,0.15);
-}
-.day-pill.active .day-pill-label { color: #00ff6a; font-size: 9px; }
-.day-pill.active .day-pill-num { color: #00ff6a; }
-.day-pill.rest {
-  border-color: rgba(255,149,0,0.45);
-  background: rgba(255,149,0,0.06);
-}
-.day-pill.rest .day-pill-num { color: #ff9500; }
-.day-pill.rest.active {
-  border-color: #ff9500;
-  box-shadow: 0 0 8px rgba(255,149,0,0.15);
-}
-
-/* Today's Training Tips Card - Green Border Style */
-.today-tips-card-new {
-  margin: 14px 16px 0;
-  padding: 13px 16px;
-  background: rgba(20,25,20,0.7);
-  border: 1px solid rgba(0,255,106,0.35);
-  border-radius: 12px;
-}
-.tips-title-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #00ff6a;
-  margin-bottom: 10px;
-}
-.tips-icon {
-  font-size: 16px;
-}
-.tips-body-text {
-  font-size: 13.5px;
-  line-height: 1.75;
-  color: #ccc;
-}
-
-/* Measurement hint */
-.measure-hint {
-  font-size: 11px;
-  color: #666;
-  font-weight: 400;
-  margin-left: 8px;
-  opacity: 0.85;
-}
-
-/* Mobile responsive for ring stats */
-@media (max-width: 360px) {
-  .ring-stats-row { grid-template-columns: repeat(2, 1fr); }
-  .ring-stat-svg-wrap { width: 64px; height: 64px; }
-  .ring-stat-val { font-size: 15px; }
-  .ring-stat-label { font-size: 10px; }
-}
-
 </style>
 </head>
 <body>
@@ -723,12 +359,9 @@ body {
 
   <!-- ===== Header ===== -->
   <div class="app-header">
-    <div class="header-brand">
-      <span class="header-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="#00ff6a"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
-      <div>
-        <div class="app-title" id="headerTitle">怪兽训练计划</div>
-        <div class="app-subtitle-en">MONSTER FITNESS</div>
-      </div>
+    <div>
+      <div class="app-title" id="headerTitle">⚡ 怪兽训练</div>
+      <div class="app-subtitle" id="headerSubtitle">今天也要全力以赴</div>
     </div>
     <div class="header-right">
       <button class="header-btn" onclick="exportData()" title="导出数据">
@@ -753,8 +386,13 @@ body {
         <div class="goal-options" id="onboardingGoalOptions"></div>
       </div>
 
+      <div class="onboarding-step">
+        <h3>03 每周训练频率</h3>
+        <div class="freq-options" id="onboardingFreqOptions"></div>
+      </div>
+
       <div class="onboarding-step" id="onboardingBodyStep" style="display:none;">
-        <h3>03 身体数据（选填）</h3>
+        <h3>04 身体数据（选填）</h3>
         <div style="display:flex;gap:8px;">
           <input type="number" id="onboardingHeight" placeholder="身高cm" style="flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:10px;color:#e0e0e0;font-size:14px;">
           <input type="number" id="onboardingWeight" placeholder="体重kg" style="flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:10px;color:#e0e0e0;font-size:14px;">
@@ -771,21 +409,17 @@ body {
       <div class="today-date" id="todayDate"></div>
       <div class="today-greeting" id="todayGreeting"></div>
       <div class="today-streak" id="todayStreak" style="display:none;"></div>
-      <div class="hero-slogan">今天也要全力以赴 · 等待见证蜕变</div>
     </div>
 
     <div class="quick-stats" id="todayQuickStats"></div>
 
-    <!-- Day 1-9 Cycle Navigation -->
-    <div class="day-cycle-nav-top" id="dayCycleNav"></div>
-
-    <div class="walk-checkin" id="walkCheckin">
+    <div class="walk-checkin" id="walkCheckin" onclick="toggleWalk()">
       <span class="walk-icon">🚶</span>
       <div class="walk-info">
         <div class="walk-name">今日步行 5km</div>
-        <div class="walk-desc">约消耗 300 卡路里</div>
+        <div class="walk-desc">约消耗 300 kcal</div>
       </div>
-      <button class="walk-btn" id="walkBtn" onclick="toggleWalk()">打卡</button>
+      <button class="walk-btn" id="walkBtn">打卡</button>
     </div>
 
     <div class="today-workout-card" id="todayWorkoutCard">
@@ -793,30 +427,8 @@ body {
         <div class="today-workout-title" id="todayWorkoutTitle">今日训练</div>
         <div class="today-workout-tag" id="todayWorkoutTag">训练日</div>
       </div>
-      
-      
-      <!-- Ring Progress -->
-      <div class="ring-progress-wrap" id="todayRingProgress">
-        <svg class="ring-svg" viewBox="0 0 160 160" style="width:160px;height:160px;">
-          <circle class="ring-bg" cx="80" cy="80" r="70"/>
-          <circle class="ring-fill" id="todayRingFill" cx="80" cy="80" r="70"
-            stroke-dasharray="440" stroke-dashoffset="440"/>
-        </svg>
-        <div class="ring-stats-below">
-          <div class="ring-pct-large" id="todayRingPct">0%</div>
-          <div class="ring-sub-text" id="todayRingSub">0/7 动作完成</div>
-        </div>
-      </div>
-
-      
       <div class="today-exercise-list" id="todayExerciseList"></div>
       <button class="start-workout-btn" id="startWorkoutBtn" onclick="startWorkout()">开始训练 ⚡</button>
-
-      <!-- Today's Training Tips - Below Start Button -->
-      <div class="today-tips-card-new" id="todayTipsCard" style="display:none;">
-        <div class="tips-title-row"><span class="tips-icon">💡</span><span>今日提示</span></div>
-        <div class="tips-body-text" id="todayTipsContent"></div>
-      </div>
     </div>
 
     <div class="quick-actions">
@@ -845,13 +457,8 @@ body {
   <div class="page" id="page-plan">
     <div class="plan-header">
       <div class="plan-title">📋 训练计划</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <div class="plan-equip-badge plan-equip-badge-clickable" id="planEquipBadge" onclick="showEquipModal()" title="点击切换器材">拉力绳</div>
-        <div class="plan-cycle-badge" id="planCycleBadge">9日循环</div>
-        <div class="plan-goal-badge" id="planGoalBadge" onclick="showEquipModal()" title="点击切换训练目标">💪 增肌</div>
-      </div>
+      <div class="plan-equip-badge" id="planEquipBadge">拉力绳</div>
     </div>
-    <div id="planGoalInfo" style="margin:0 16px 8px;font-size:11px;color:var(--text-secondary);text-align:center;"></div>
     <div id="planDayList"></div>
     <button class="plan-switch-btn" onclick="showEquipModal()">🔄 切换训练器材/方案</button>
   </div>
@@ -867,11 +474,6 @@ body {
       <div class="workout-exercise-name" id="activeExName"></div>
       <div class="workout-exercise-sets-info" id="activeExSets"></div>
       <div class="workout-timer" id="activeTimer">00:00</div>
-      <div class="workout-rest-timer" id="restTimerWrap" style="display:none;">
-        <div style="font-size:13px;color:#ff9500;margin-bottom:6px;">⏱ 组间休息</div>
-        <div style="font-size:36px;font-weight:700;color:#ff9500;" id="restTimerDisplay">60</div>
-        <button onclick="skipRestTimer()" style="margin-top:8px;padding:8px 20px;background:rgba(255,149,0,0.15);border:1px solid rgba(255,149,0,0.4);border-radius:20px;color:#ff9500;font-size:12px;cursor:pointer;">跳过</button>
-      </div>
       <div class="workout-set-btns" id="activeSetBtns"></div>
       <button class="workout-next-btn" id="activeNextBtn" onclick="nextExercise()">完成这组 ✓</button>
     </div>
@@ -893,24 +495,17 @@ body {
     <div class="diet-summary-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <div style="font-size:14px;font-weight:600;">今日热量</div>
-        <div style="font-size:12px;color:var(--text-secondary);" id="dietCalText">0 / 0 卡路里</div>
+        <div style="font-size:12px;color:var(--text-secondary);" id="dietCalText">0 / 0 kcal</div>
       </div>
       <div class="diet-cal-bar"><div class="diet-cal-fill" id="dietCalFill"></div></div>
       <div class="diet-cal-labels">
-        <span id="dietIntakeText">摄入: 0 卡路里</span>
-        <span id="dietBurnText">消耗: 0 卡路里</span>
+        <span id="dietIntakeText">摄入: 0 kcal</span>
+        <span id="dietBurnText">消耗: 0 kcal</span>
       </div>
     </div>
     <div id="dietMealList"></div>
     <div style="padding:0 16px;margin-top:12px;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-        <span style="font-size:12px;color:var(--text-secondary);">添加到：</span>
-        <div id="quickMealSelector" style="display:flex;gap:4px;">
-          <button onclick="setQuickMeal('breakfast')" class="meal-select-btn" data-meal="breakfast" style="padding:4px 10px;font-size:11px;background:#222;border:1px solid #333;border-radius:12px;color:#888;cursor:pointer;">🌅 早餐</button>
-          <button onclick="setQuickMeal('lunch')" class="meal-select-btn" data-meal="lunch" style="padding:4px 10px;font-size:11px;background:#222;border:1px solid #333;border-radius:12px;color:#888;cursor:pointer;">☀️ 午餐</button>
-          <button onclick="setQuickMeal('dinner')" class="meal-select-btn" data-meal="dinner" style="padding:4px 10px;font-size:11px;background:#222;border:1px solid #333;border-radius:12px;color:#888;cursor:pointer;">🌙 晚餐</button>
-        </div>
-      </div>
+      <div style="fontize:12px;color:var(--text-secondary);margin-bottom:8px;">快捷添加（点击增加）</div>
       <div class="quick-foods" id="quickFoodList"></div>
     </div>
   </div>
@@ -919,7 +514,7 @@ body {
   <div class="page" id="page-data">
     <div style="padding:16px 16px 8px;"><div style="font-size:17px;font-weight:700;">📊 身体数据</div></div>
     <div class="data-section">
-      <div class="data-section-title">⚖️ 体重记录 <span class="measure-hint">建议：晨起空腹或运动后测量</span></div>
+      <div class="data-section-title">⚖️ 体重记录</div>
       <div class="weight-input-row">
         <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="今日体重 kg">
         <button class="weight-input-btn" onclick="addWeight()">记录</button>
@@ -927,9 +522,8 @@ body {
       <div class="chart-container"><canvas class="chart-canvas" id="weightChart"></canvas></div>
     </div>
     <div class="data-section">
-      <div class="data-section-title" onclick="toggleMeasurements()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;">📏 围度记录（选填）<span class="measure-hint">每2-4周测一次即可</span><span id="measToggle" style="font-size:12px;color:var(--text-secondary);">▶</span></div>
-      <div id="measBody" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
+      <div class="data-section-title">📏 围度记录（选填）</div>
+      <div style="display:grid;grid-template-columns:repeat(2,gap:8px;margin-bottom:12px;">
         <input type="number" step="0.1" class="weight-input" id="chestInput" placeholder="胸围 cm">
         <input type="number" step="0.1" class="weight-input" id="armInput" placeholder="臂围 cm">
         <input type="number" step="0.1" class="weight-input" id="waistInput" placeholder="腰围 cm">
@@ -937,10 +531,9 @@ body {
       </div>
       <button class="weight-input-btn" onclick="addMeasurement()" style="width:100%;margin-bottom:12px;">记录围度</button>
       <div class="chart-container"><canvas class="chart-canvas" id="measurementChart"></canvas></div>
-      </div>
     </div>
     <div class="data-section">
-      <div class="data-section-title">💧 饮水记录 <span class="measure-hint">每日目标 2500ml</span></div>
+      <div class="data-section-title">💧 饮水记录</div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
         <div style="flex:1;background:var(--bg-card);border-radius:10px;padding:12px;border:1px solid #222;">
           <div style="font-size:20px;font-weight:700;color:var(--text-green);" id="waterAmount">0</div>
@@ -955,55 +548,30 @@ body {
   <!-- ===== Stats Page ===== -->
   <div class="page" id="page-stats">
     <div style="padding:16px 16px 8px;"><div style="font-size:17px;font-weight:700;">📈 综合统计</div></div>
-    <!-- Ring Stats Row -->
-    <div class="ring-stats-row">
-      <!-- Streak Ring -->
-      <div class="ring-stat-card">
-        <div class="ring-stat-svg-wrap">
-          <svg class="ring-stat-svg" viewBox="0 0 100 100">
-            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
-            <circle class="ring-stat-fill" id="ringStreakFill" cx="50" cy="50" r="42"
-              stroke-dasharray="264" stroke-dashoffset="264" style="stroke:#00ff6a;"/>
-          </svg>
-          <div class="ring-stat-center"><div class="ring-stat-val" id="statsStreak">0</div></div>
+    <div class="stats-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="stats-big-number" id="statsStreak">0</div>
+          <div class="stats-label">连续打卡天数</div>
         </div>
-        <div class="ring-stat-label">连续打卡(天)</div>
+        <div style="text-align:right;">
+          <div class="stats-big-number" id="statsTotal" style="font-size:24px;">0</div>
+          <div class="stats-label">总训练次数</div>
+        </div>
       </div>
-      <!-- Total Ring -->
-      <div class="ring-stat-card">
-        <div class="ring-stat-svg-wrap">
-          <svg class="ring-stat-svg" viewBox="0 0 100 100">
-            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
-            <circle class="ring-stat-fill" id="ringTotalFill" cx="50" cy="50" r="42"
-              stroke-dasharray="264" stroke-dashoffset="264" style="stroke:#00ccff;"/>
-          </svg>
-          <div class="ring-stat-center"><div class="ring-stat-val" id="statsTotal">0</div></div>
+      <div class="stats-row">
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" id="statsWeekRate" style="color:var(--text-green);">0%</div>
+          <div class="stats-mini-label">本周完成率</div>
         </div>
-        <div class="ring-stat-label">总训练次数</div>
-      </div>
-      <!-- Week Rate Ring -->
-      <div class="ring-stat-card">
-        <div class="ring-stat-svg-wrap">
-          <svg class="ring-stat-svg" viewBox="0 0 100 100">
-            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
-            <circle class="ring-stat-fill" id="ringWeekFill" cx="50" cy="50" r="42"
-              stroke-dasharray="264" stroke-dashoffset="264" style="stroke:#ff9500;"/>
-          </svg>
-          <div class="ring-stat-center"><div class="ring-stat-val" id="statsWeekRateSmall">0%</div></div>
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" id="statsMonthRate" style="color:var(--text-orange);">0%</div>
+          <div class="stats-mini-label">本月完成率</div>
         </div>
-        <div class="ring-stat-label">本周完成率</div>
-      </div>
-      <!-- Weight Change Ring -->
-      <div class="ring-stat-card">
-        <div class="ring-stat-svg-wrap">
-          <svg class="ring-stat-svg" viewBox="0 0 100 100">
-            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
-            <circle class="ring-stat-fill" id="ringWeightFill" cx="50" cy="50" r="42"
-              stroke-dasharray="264" stroke-dashoffset="132" style="stroke:#a855f7;"/>
-          </svg>
-          <div class="ring-stat-center"><div class="ring-stat-val" id="statsWeightChange">--</div></div>
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" id="statsWeightChange">--</div>
+          <div class="stats-mini-label">体重变化</div>
         </div>
-        <div class="ring-stat-label">体重变化(kg)</div>
       </div>
     </div>
     <div class="stats-card">
@@ -1078,7 +646,6 @@ body {
           <button class="modal-goal-btn" onclick="selectModalGoal('muscle')" id="modalGoalMuscle" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">💪 增肌</button>
           <button class="modal-goal-btn" onclick="selectModalGoal('strength')" id="modalGoalStrength" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">🔥 力量</button>
           <button class="modal-goal-btn" onclick="selectModalGoal('weight_loss')" id="modalGoalWeightLoss" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">🏃 减脂</button>
-          <button class="modal-goal-btn" onclick="selectModalGoal('endurance')" id="modalGoalEndurance" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">❤️ 耐力</button>
         </div>
       </div>
       <button class="modal-btn" onclick="applyEquipSwitch()">生成新方案 →</button>
@@ -1092,7 +659,7 @@ body {
       <div class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       </div>
-      <div class="nav-label">打卡</div>
+      <div class="nav-label">今日</div>
     </div>
     <div class="nav-item" onclick="switchPage('plan')" data-page="plan">
       <div class="nav-icon">
@@ -1146,314 +713,151 @@ var GOALS = {
 
 // ===== Exercise Database (Extensible) =====
 var EXERCISE_DB = [
-  // ========== 拉力绳 (band) - 完整版 ==========
-  // 胸部
-  { name:'拉力绳胸推',        equip:['band','mixed'],     muscle:'chest',    difficulty:1, sets:4, reps:'12-15', rest:60 },
-  { name:'拉力绳飞鸟',        equip:['band','mixed'],     muscle:'chest',    difficulty:1, sets:3, reps:'15-20', rest:45 },
-  { name:'拉力绳上斜胸推',    equip:['band','mixed'],     muscle:'chest',    difficulty:2, sets:4, reps:'12-15', rest:60 },
-  { name:'拉力绳夹胸',        equip:['band','mixed'],     muscle:'chest',    difficulty:1, sets:3, reps:'15-18', rest:45 },
-  // 背部
-  { name:'拉力绳高位下拉',    equip:['band','mixed'],     muscle:'back',     difficulty:2, sets:4, reps:'12-15', rest:60 },
-  { name:'拉力绳坐姿划船',    equip:['band','mixed'],     muscle:'back',     difficulty:1, sets:4, reps:'12-15', rest:60 },
-  { name:'拉力绳直臂下压',    equip:['band','mixed'],     muscle:'back',     difficulty:1, sets:3, reps:'15-20', rest:45 },
-  { name:'拉力绳单臂划船',    equip:['band','mixed'],     muscle:'back',     difficulty:2, sets:3, reps:'12-15/臂', rest:60 },
-  // 肩部
-  { name:'拉力绳肩推',        equip:['band','mixed'],     muscle:'shoulder', difficulty:1, sets:4, reps:'12-15', rest:60 },
-  { name:'拉力绳侧平举',      equip:['band','mixed'],     muscle:'shoulder', difficulty:1, sets:3, reps:'15-20', rest:45 },
-  { name:'拉力绳面拉',        equip:['band','mixed'],     muscle:'shoulder', difficulty:2, sets:3, reps:'15-20', rest:60 },
-  { name:'拉力绳前平举',      equip:['band','mixed'],     muscle:'shoulder', difficulty:1, sets:3, reps:'15-18', rest:45 },
-  { name:'拉力绳俯身飞鸟',    equip:['band','mixed'],     muscle:'shoulder', difficulty:2, sets:3, reps:'12-15', rest:45 },
-  // 手臂 - 二头
-  { name:'拉力绳二头弯举',    equip:['band','mixed'],     muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
-  { name:'拉力绳锤式弯举',    equip:['band','mixed'],     muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
-  // 手臂 - 三头
-  { name:'拉力绳三头下压',    equip:['band','mixed'],     muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
-  { name:'拉力绳三头后展',    equip:['band','mixed'],     muscle:'arm',      difficulty:2, sets:3, reps:'12-15', rest:45 },
-  // 腿部
-  { name:'拉力绳深蹲',        equip:['band','mixed'],     muscle:'legs',     difficulty:2, sets:4, reps:'15-20', rest:60 },
-  { name:'拉力绳箭步蹲',      equip:['band','mixed'],     muscle:'legs',     difficulty:2, sets:3, reps:'12/腿', rest:60 },
-  { name:'拉力绳腿弯举',      equip:['band','mixed'],     muscle:'legs',     difficulty:2, sets:3, reps:'15-20', rest:60 },
-  { name:'拉力绳臀桥',        equip:['band','mixed'],     muscle:'glute',    difficulty:1, sets:4, reps:'15-20', rest:60 },
-  { name:'拉力绳踢臀',        equip:['band','mixed'],     muscle:'glute',    difficulty:2, sets:3, reps:'15/侧', rest:45 },
+  // 拉力绳
+  { name:'拉力绳胸推',     equip:['band'],     muscle:'chest',  difficulty:1, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳飞鸟',     equip:['band'],     muscle:'chest',  difficulty:1, sets:3, reps:'15-20', rest:45 },
+  { name:'拉力绳高位下拉', equip:['band'],     muscle:'back',   difficulty:2, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳坐姿划船', equip:['band'],     muscle:'back',   difficulty:1, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳直臂下压', equip:['band'],     muscle:'back',   difficulty:1, sets:3, reps:'15-20', rest:45 },
+  { name:'拉力绳深蹲',     equip:['band'],     muscle:'legs',   difficulty:2, sets:4, reps:'15-20', rest:60 },
+  { name:'拉力绳箭步蹲',   equip:['band'],     muscle:'legs',   difficulty:2, sets:3, reps:'12/腿', rest:60 },
+  { name:'拉力绳腿弯举',   equip:['band'],     muscle:'legs',   difficulty:2, sets:3, reps:'15-20', rest:60 },
+  { name:'拉力绳肩推',     equip:['band'],     muscle:'shoulder',difficulty:1, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳侧平举',   equip:['band'],     muscle:'shoulder',difficulty:1, sets:3, reps:'15-20', rest:45 },
+  { name:'拉力绳面拉',     equip:['band'],     muscle:'shoulder',difficulty:2, sets:3, reps:'15-20', rest:60 },
+  { name:'拉力绳二头弯举', equip:['band'],     muscle:'arm',    difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'拉力绳三头下压', equip:['band'],     muscle:'arm',    difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'拉力绳臀桥',     equip:['band'],     muscle:'legs',   difficulty:1, sets:4, reps:'15-20', rest:60 },
+  // 哑铃
+  { name:'哑铃平卧推',     equip:['dumbbell'], muscle:'chest',  difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃上斜推',     equip:['dumbbell'], muscle:'chest',  difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃飞鸟',       equip:['dumbbell'], muscle:'chest',  difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'哑铃单臂划船',   equip:['dumbbell'], muscle:'back',   difficulty:2, sets:4, reps:'10-12/臂', rest:60 },
+  { name:'哑铃硬拉',       equip:['dumbbell'], muscle:'back',   difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃深蹲',       equip:['dumbbell'], muscle:'legs',   difficulty:2, sets:4, reps:'10-15', rest:60 },
+  { name:'哑铃箭步蹲',     equip:['dumbbell'], muscle:'legs',   difficulty:2, sets:3, reps:'10/腿', rest:60 },
+  { name:'哑铃肩推',       equip:['dumbbell'], muscle:'shoulder',difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃侧平举',     equip:['dumbbell'], muscle:'shoulder',difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'哑铃弯举',       equip:['dumbbell'], muscle:'arm',    difficulty:1, sets:3, reps:'10-12', rest:45 },
+  { name:'哑铃三头屈伸',   equip:['dumbbell'], muscle:'arm',    difficulty:2, sets:3, reps:'10-12', rest:45 },
+  // 杠铃
+  { name:'杠铃平卧推',     equip:['barbell'],  muscle:'chest',  difficulty:3, sets:5, reps:'5-8', rest:90 },
+  { name:'杠铃深蹲',       equip:['barbell'],  muscle:'legs',   difficulty:3, sets:5, reps:'5-8', rest:120 },
+  { name:'杠铃硬拉',       equip:['barbell'],  muscle:'back',   difficulty:3, sets:5, reps:'5-8', rest:120 },
+  { name:'杠铃划船',       equip:['barbell'],  muscle:'back',   difficulty:3, sets:4, reps:'6-10', rest:90 },
+  { name:'杠铃肩推',       equip:['barbell'],  muscle:'shoulder',difficulty:3, sets:4, reps:'6-10', rest:90 },
+  // 徒手
+  { name:'俯卧撑',         equip:['bodyweight'],muscle:'chest',  difficulty:1, sets:4, reps:'10-20', rest:45 },
+  { name:'钻石俯卧撑',     equip:['bodyweight'],muscle:'chest',  difficulty:2, sets:3, reps:'8-12', rest:45 },
+  { name:'引体向上',       equip:['bodyweight'],muscle:'back',   difficulty:3, sets:4, reps:'5-10', rest:60 },
+  { name:'徒手深蹲',       equip:['bodyweight'],muscle:'legs',   difficulty:1, sets:4, reps:'20-30', rest:45 },
+  { name:'徒手箭步蹲',     equip:['bodyweight'],muscle:'legs',   difficulty:2, sets:3, reps:'12/腿', rest:60 },
+  { name:'平板支撑',       equip:['bodyweight'],muscle:'core',   difficulty:1, sets:3, reps:'30-60秒', rest:45 },
+  { name:'卷腹',           equip:['bodyweight'],muscle:'core',   difficulty:1, sets:4, reps:'15-20', rest:30 },
+  { name:'登山跑',         equip:['bodyweight'],muscle:'core',   difficulty:2, sets:3, reps:'30秒', rest:30 },
+  // 壶铃
+  { name:'壶铃摇摆',       equip:['kettlebell'],muscle:'legs',   difficulty:2, sets:4, reps:'15-20', rest:60 },
+  { name:'壶铃高脚杯深蹲', equip:['kettlebell'],muscle:'legs',   difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'壶铃单臂划船',   equip:['kettlebell'],muscle:'back',   difficulty:2, sets:3, reps:'10-12/臂', rest:60 },
+  { name:'壶铃肩推',       equip:['kettlebell'],muscle:'shoulder',difficulty:2, sets:3, reps:'8-12', rest:60 },
   // 核心
-  { name:'拉力绳卷腹',        equip:['band','mixed'],     muscle:'core',     difficulty:1, sets:3, reps:'15-20', rest:30 },
-  { name:'拉力绳伐木劈',      equip:['band','mixed'],     muscle:'core',     difficulty:2, sets:3, reps:'12/侧', rest:45 },
-
-  // ========== 哑铃 (dumbbell) - 完整版 ==========
-  // 胸部
-  { name:'哑铃平卧推',        equip:['dumbbell','mixed'], muscle:'chest',    difficulty:2, sets:4, reps:'8-12', rest:60 },
-  { name:'哑铃上斜推',        equip:['dumbbell','mixed'], muscle:'chest',    difficulty:2, sets:4, reps:'10-12', rest:60 },
-  { name:'哑铃下斜推',        equip:['dumbbell','mixed'], muscle:'chest',    difficulty:2, sets:4, reps:'10-12', rest:60 },
-  { name:'哑铃飞鸟',          equip:['dumbbell','mixed'], muscle:'chest',    difficulty:1, sets:3, reps:'12-15', rest:45 },
-  // 背部
-  { name:'哑铃单臂划船',      equip:['dumbbell','mixed'], muscle:'back',     difficulty:2, sets:4, reps:'10-12/臂', rest:60 },
-  { name:'哑铃硬拉',          equip:['dumbbell','mixed'], muscle:'back',     difficulty:2, sets:4, reps:'8-12', rest:60 },
-  { name:'哑铃俯身划船',      equip:['dumbbell','mixed'], muscle:'back',     difficulty:2, sets:4, reps:'10-12', rest:60 },
-  { name:'哑铃耸肩',          equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:1, sets:3, reps:'12-15', rest:45 },
-  // 肩部
-  { name:'哑铃肩推',          equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:2, sets:4, reps:'10-12', rest:60 },
-  { name:'哑铃侧平举',        equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:1, sets:3, reps:'12-15', rest:45 },
-  { name:'哑铃前平举',        equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:1, sets:3, reps:'12-15', rest:45 },
-  { name:'哑铃俯身飞鸟',      equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:2, sets:3, reps:'10-12', rest:45 },
-  // 手臂 - 二头
-  { name:'哑铃站姿弯举',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:1, sets:3, reps:'10-12', rest:45 },
-  { name:'哑铃锤式弯举',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:1, sets:3, reps:'10-12', rest:45 },
-  { name:'哑铃集中弯举',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
-  // 手臂 - 三头
-  { name:'哑铃三头屈伸',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:2, sets:3, reps:'10-12', rest:45 },
-  { name:'哑铃三头颈后臂屈伸',equip:['dumbbell','mixed'], muscle:'arm',      difficulty:2, sets:3, reps:'10-12', rest:45 },
-  // 腿部
-  { name:'哑铃深蹲',          equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:4, reps:'10-15', rest:60 },
-  { name:'哑铃罗马尼亚硬拉',  equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:4, reps:'10-12', rest:60 },
-  { name:'哑铃箭步蹲',        equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:3, reps:'10/腿', rest:60 },
-  { name:'哑铃腿弯举',        equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:3, reps:'12-15', rest:45 },
-  { name:'哑铃臀桥',          equip:['dumbbell','mixed'], muscle:'glute',    difficulty:1, sets:4, reps:'12-15', rest:60 },
-  // 核心
-  { name:'哑铃俄罗斯转体',    equip:['dumbbell','mixed'], muscle:'core',     difficulty:2, sets:3, reps:'20', rest:45 },
-  { name:'哑铃侧屈',          equip:['dumbbell','mixed'], muscle:'core',     difficulty:1, sets:3, reps:'15/侧', rest:45 },
-
-  // ========== 杠铃 (barbell) - 完整版 ==========
-  { name:'杠铃平卧推',        equip:['barbell','mixed'],  muscle:'chest',    difficulty:3, sets:5, reps:'5-8', rest:90 },
-  { name:'杠铃上斜卧推',      equip:['barbell','mixed'],  muscle:'chest',    difficulty:3, sets:4, reps:'6-10', rest:90 },
-  { name:'杠铃深蹲',          equip:['barbell','mixed'],  muscle:'legs',     difficulty:3, sets:5, reps:'5-8', rest:120 },
-  { name:'杠铃硬拉',          equip:['barbell','mixed'],  muscle:'back',     difficulty:3, sets:5, reps:'5-8', rest:120 },
-  { name:'杠铃划船',          equip:['barbell','mixed'],  muscle:'back',     difficulty:3, sets:4, reps:'6-10', rest:90 },
-  { name:'杠铃肩推',          equip:['barbell','mixed'],  muscle:'shoulder', difficulty:3, sets:4, reps:'6-10', rest:90 },
-  { name:'杠铃箭步蹲',        equip:['barbell','mixed'],  muscle:'legs',     difficulty:3, sets:4, reps:'8/腿', rest:90 },
-  { name:'杠铃臀冲',          equip:['barbell','mixed'],  muscle:'glute',    difficulty:3, sets:4, reps:'8-10', rest:90 },
-  { name:'杠铃二头弯举',      equip:['barbell','mixed'],  muscle:'arm',      difficulty:2, sets:3, reps:'8-12', rest:60 },
-  { name:'杠铃三头臂屈伸',    equip:['barbell','mixed'],  muscle:'arm',      difficulty:2, sets:3, reps:'8-12', rest:60 },
-
-  // ========== 徒手 (bodyweight) - 完整版 ==========
-  // 胸部
-  { name:'标准俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:1, sets:4, reps:'12-20', rest:45 },
-  { name:'宽距俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:1, sets:3, reps:'10-15', rest:45 },
-  { name:'钻石俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:2, sets:3, reps:'8-12', rest:45 },
-  { name:'上斜俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:1, sets:3, reps:'12-18', rest:45 },
-  { name:'下斜俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:2, sets:3, reps:'8-12', rest:45 },
-  // 背部
-  { name:'引体向上',          equip:['bodyweight','mixed'], muscle:'back',   difficulty:3, sets:4, reps:'5-10', rest:60 },
-  { name:'反手引体向上',      equip:['bodyweight','mixed'], muscle:'arm',    difficulty:3, sets:3, reps:'5-8', rest:60 },
-  { name:'澳式引体向上',      equip:['bodyweight','mixed'], muscle:'back',   difficulty:2, sets:3, reps:'8-12', rest:60 },
-  // 肩部
-  { name:'倒立俯卧撑(进阶)', equip:['bodyweight','mixed'], muscle:'shoulder',difficulty:3, sets:3, reps:'5-8', rest:60 },
-  { name:'折刀俯卧撑',        equip:['bodyweight','mixed'], muscle:'shoulder',difficulty:2, sets:3, reps:'8-12', rest:45 },
-  { name:'Y字伸展',          equip:['bodyweight','mixed'], muscle:'shoulder',difficulty:1, sets:3, reps:'12-15', rest:30 },
-  // 手臂 - 三头
-  { name:'椅子臂屈伸',        equip:['bodyweight','mixed'], muscle:'arm',    difficulty:1, sets:3, reps:'10-15', rest:45 },
-  { name:'窄距俯卧撑',        equip:['bodyweight','mixed'], muscle:'arm',    difficulty:2, sets:3, reps:'8-12', rest:45 },
-  // 腿部
-  { name:'徒手深蹲',          equip:['bodyweight','mixed'], muscle:'legs',   difficulty:1, sets:4, reps:'20-30', rest:45 },
-  { name:'徒手箭步蹲',        equip:['bodyweight','mixed'], muscle:'legs',   difficulty:2, sets:3, reps:'12/腿', rest:60 },
-  { name:'保加利亚分腿蹲',    equip:['bodyweight','mixed'], muscle:'legs',   difficulty:3, sets:3, reps:'8-10/腿', rest:60 },
-  { name:'臀桥',              equip:['bodyweight','mixed'], muscle:'glute',  difficulty:1, sets:4, reps:'15-20', rest:45 },
-  { name:'单腿硬拉',          equip:['bodyweight','mixed'], muscle:'glute',  difficulty:2, sets:3, reps:'10/腿', rest:60 },
-  // 核心
-  { name:'平板支撑',          equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'30-60秒', rest:45 },
-  { name:'卷腹',              equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:4, reps:'15-20', rest:30 },
-  { name:'登山跑',            equip:['bodyweight','mixed'], muscle:'core',   difficulty:2, sets:3, reps:'30秒', rest:30 },
-  { name:'俄罗斯转体',        equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'20', rest:45 },
-  { name:'死虫式',            equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'12/侧', rest:45 },
-  { name:'仰卧举腿',          equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'15', rest:45 },
-  { name:'反向卷腹',          equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'15-20', rest:30 },
-  { name:'侧平板支撑',        equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'30秒/侧', rest:30 },
-  { name:'V字支撑',           equip:['bodyweight','mixed'], muscle:'core',   difficulty:2, sets:3, reps:'20-30秒', rest:30 },
-
-  // ========== 壶铃 (kettlebell) - 完整版 ==========
-  { name:'壶铃摇摆',          equip:['kettlebell','mixed'], muscle:'legs',   difficulty:2, sets:4, reps:'15-20', rest:60 },
-  { name:'壶铃高脚杯深蹲',    equip:['kettlebell','mixed'], muscle:'legs',   difficulty:2, sets:4, reps:'10-12', rest:60 },
-  { name:'壶铃单臂划船',      equip:['kettlebell','mixed'], muscle:'back',   difficulty:2, sets:3, reps:'10-12/臂', rest:60 },
-  { name:'壶铃肩推',          equip:['kettlebell','mixed'], muscle:'shoulder',difficulty:2, sets:3, reps:'8-12', rest:60 },
-  { name:'壶铃硬拉',          equip:['kettlebell','mixed'], muscle:'legs',   difficulty:2, sets:4, reps:'8-10', rest:60 },
-  { name:'壶铃土耳其起立',    equip:['kettlebell','mixed'], muscle:'core',   difficulty:3, sets:3, reps:'5/侧', rest:90 },
-  { name:'壶铃双臂摆举',      equip:['kettlebell','mixed'], muscle:'glute',  difficulty:2, sets:4, reps:'12-15', rest:60 },
-  { name:'壶铃高翻',          equip:['kettlebell','mixed'], muscle:'back',   difficulty:3, sets:3, reps:'8-10', rest:60 },
-  { name:'壶铃二头弯举',      equip:['kettlebell','mixed'], muscle:'arm',    difficulty:1, sets:3, reps:'10-12', rest:45 },
-  { name:'壶铃三头屈伸',      equip:['kettlebell','mixed'], muscle:'arm',    difficulty:2, sets:3, reps:'10-12', rest:45 },
+  { name:'平板支撑',       equip:['bodyweight'],muscle:'core',  difficulty:1, sets:3, reps:'30-60秒', rest:45 },
+  { name:'俄罗斯转体',     equip:['bodyweight'],muscle:'core',  difficulty:2, sets:3, reps:'20', rest:45 },
+  { name:'死虫式',         equip:['bodyweight'],muscle:'core',  difficulty:1, sets:3, reps:'12/侧', rest:45 },
+  { name:'仰卧举腿',       equip:['bodyweight'],muscle:'core',  difficulty:1, sets:3, reps:'15', rest:45 },
 ];
 
 // ===== Plan Generator =====
-// ===== 9-Day Fixed Cycle Template =====
-var NINE_DAY_TEMPLATE = [
-  { name: '胸 + 三头',  muscles: ['chest','arm_tricep'], isRest: false },
-  { name: '背 + 二头',  muscles: ['back','arm_bicep'],  isRest: false },
-  { name: '肩 + 腹',    muscles: ['shoulder','core'],  isRest: false },
-  { name: '休息日',     muscles: [],                   isRest: true  },
-  { name: '胸 + 三头',  muscles: ['chest','arm_tricep'], isRest: false }, // 重复Day1
-  { name: '背 + 二头',  muscles: ['back','arm_bicep'],  isRest: false }, // 重复Day2
-  { name: '肩 + 腹',    muscles: ['shoulder','core'],  isRest: false }, // 重复Day3
-  { name: '腿 + 臀',    muscles: ['legs','glute'],      isRest: false },
-  { name: '休息日',     muscles: [],                   isRest: true  },
-];
-
-// Training Tips Database - Professional tips for each muscle group
-var TRAINING_TIPS = {
-  '胸': {
-    tips: [
-      '推类动作时，肩胛骨要后收下沉，避免耸肩',
-      '下放时要感受胸部拉伸，不要完全锁死手肘',
-      '推起时想象双手向中间挤压，激活更多胸肌纤维',
-      '呼吸节奏：发力时呼气，还原时吸气'
-    ],
-    warning: '⚠️ 胸部训练后注意三角肌前束的恢复'
-  },
-  '背': {
-    tips: [
-      '拉类动作时先启动背阔肌，不要靠手臂借力',
-      '保持背部挺直，核心收紧保护腰椎',
-      '下拉/划船时肩胛骨要主动收缩',
-      '想象用肘部去拉，而不是用手'
-    ],
-    warning: '⚠️ 背部训练后可做猫牛式放松脊柱'
-  },
-  '肩': {
-    tips: [
-      '侧平举时小拇指略高于大拇指（内旋）更好刺激中束',
-      '肩推时避免过度后仰，防止腰部代偿',
-      '肩部训练重量不宜过大，注重动作控制',
-      '每组最后2-3次做顶峰收缩停留1-2秒'
-    ],
-    warning: '⚠️ 肩部有伤史者避免颈后推举'
-  },
-  '腹': {
-    tips: [
-      '卷腹时下巴微收，视线看向膝盖方向',
-      '不要用脖子发力，双手轻扶耳侧即可',
-      '全程保持核心紧绷，不要塌腰',
-      '慢起慢落比快做更有效果'
-    ],
-    warning: '⚠️ 腰部不适者避免仰卧抬腿类动作'
-  },
-  '腿+臀': {
-    tips: [
-      '深蹲时膝盖方向与脚尖一致，不要内扣或外翻',
-      '蹲至大腿平行地面即可，不必追求全蹲',
-      '臀部训练要有意识地挤压臀部肌肉',
-      '腿部训练后做静态拉伸帮助恢复'
-    ],
-    warning: '⚠️ 膝盖不适者减小深蹲幅度，选择箱式深蹲'
-  },
-  '休息日': {
-    tips: [
-      '休息日也要活动身体，散步15-30分钟促进血液循环',
-      '可以做一些轻度拉伸或泡沫轴放松',
-      '保证充足睡眠7-8小时，肌肉在睡眠中生长',
-      '补充足够蛋白质和水分'
-    ],
-    warning: '💤 好好休息是为了更好的训练！'
-  }
-};
-
-// Muscle group mapping for exercise selection
-var MUSCLE_MAP = {
-  chest:       ['chest'],
-  back:        ['back'],
-  shoulder:    ['shoulder'],
-  core:        ['core'],
-  legs:        ['legs'],
-  glute:       ['legs', 'glute'],
-  arm_bicep:   ['arm'],
-  arm_tricep:  ['arm'],
-};
-
-// Exercises per muscle group (how many to pick)
-var MUSCLE_EX_COUNT = {
-  chest: 3, back: 3, shoulder: 2, core: 3, legs: 3, glute: 2,
-  arm_bicep: 2, arm_tricep: 2,
-};
-
-// Plan Generator - Fixed 9-day cycle, goal-aware
-function generatePlan(equipId, goalId) {
+function generatePlan(equipId, goalId, freqPerWeek) {
   if (!EQUIPMENT[equipId]) return [];
-  var allExercises = EXERCISE_DB.filter(function(e) { return e.equip.indexOf(equipId) >= 0; });
-  if (allExercises.length === 0) return [];
+  var availExercises = EXERCISE_DB.filter(function(e) { return e.equip.indexOf(equipId) >= 0; });
+  if (availExercises.length === 0) return [];
 
-  // Goal-specific programming — different goals = different exercises + params
   var goalConfig = {
-    muscle:      { setBonus:0,  repMod:1.0, restMod:1.0, intensity:'balanced',  info:'标准增肌 · 8-15次/组' },
-    strength:    { setBonus:1,  repMod:0.6, restMod:1.5, intensity:'high',      info:'大重量力量 · 5-8次/组 · 长休息' },
-    weight_loss: { setBonus:0,  repMod:1.4, restMod:0.6, intensity:'metabolic', info:'燃脂模式 · 15-25次/组 · 短休息' },
-    endurance:   { setBonus:-1, repMod:1.5, restMod:0.7, intensity:'endurance', info:'耐力模式 · 15-25次/组 · 中等休息' },
+    muscle:      { repsRange:'8-12',  setCount:4, restTime:60, preferMuscle:['chest','back','legs','shoulder'] },
+    strength:    { repsRange:'5-8',  setCount:5, restTime:90, preferMuscle:['chest','back','legs'] },
+    weight_loss: { repsRange:'15-20', setCount:3, restTime:30, preferMuscle:['legs','chest','core','full'] },
+    endurance:   { repsRange:'15-20', setCount:3, restTime:30, preferMuscle:['legs','core','chest'] },
   };
-  var cfg = goalConfig[goalId] || goalConfig['muscle'];
+  var config = goalConfig[goalId] || goalConfig['muscle'];
 
-  // Step 1: Filter/Difficulty-preference by goal
-  var avail;
-  if (cfg.intensity === 'high') {
-    avail = allExercises.filter(function(e) { return e.difficulty >= 2; });
-    if (avail.length < 8) avail = allExercises.slice();
+  var splitPlan;
+  if (freqPerWeek <= 3) {
+    splitPlan = [
+      { name:'全身训练A', muscles:['chest','back','legs','shoulder','core'] },
+      { name:'全身训练B', muscles:['chest','back','legs','arm','core'] },
+      { name:'全身训练C', muscles:['chest','back','legs','shoulder','arm','core'] },
+    ];
+  } else if (freqPerWeek <= 4) {
+    splitPlan = [
+      { name:'上肢推', muscles:['chest','shoulder','arm'] },
+      { name:'上肢拉', muscles:['back','arm','shoulder'] },
+      { name:'下肢A',  muscles:['legs','core'] },
+      { name:'下肢B',  muscles:['legs','core'] },
+    ];
   } else {
-    avail = allExercises.slice();
+    splitPlan = [
+      { name:'推日(Push)',  muscles:['chest','shoulder','arm'] },
+      { name:'拉日(Pull)',  muscles:['back','arm'] },
+      { name:'腿日(Legs)',  muscles:['legs','core'] },
+      { name:'推日2',       muscles:['chest','shoulder'] },
+      { name:'拉日2',       muscles:['back','shoulder','arm'] },
+    ];
   }
 
-  // Step 2: Rep helpers
-  function parseR(s) {
-    var m = String(s).match(/(\d+)-(\d+)/);
-    if (m) return { min: parseInt(m[1]), max: parseInt(m[2]) };
-    var n = parseInt(s); if (!isNaN(n)) return { min: n, max: n };
-    return { min: 10, max: 12 };
-  }
-  function scaleR(s, mod) {
-    var r = parseR(s); var mn = Math.round(r.min * mod), mx = Math.round(r.max * mod);
-    if (mn < 5) mn = 5; if (mx < mn + 2) mx = mn + Math.max(2, Math.round(mn * 0.3));
-    return mn === mx ? String(mn) : mn + '-' + mx;
-  }
-
-  // Step 3: Build 9-day plan with variety
   var plan = [];
-  var globalUsed = {};
+  var usedExercises = {};
 
-  for (var d = 0; d < NINE_DAY_TEMPLATE.length; d++) {
-    var tpl = NINE_DAY_TEMPLATE[d];
-    if (tpl.isRest) {
-      plan.push({ name: tpl.name, exercises: [], isRest: true, dayNum: d + 1, goal: goalId });
-      continue;
-    }
-    var dayExs = [];
-    var dayUsed = {};
-    for (var m = 0; m < tpl.muscles.length; m++) {
-      var mk = tpl.muscles[m];
-      var tgtM = MUSCLE_MAP[mk] || [mk];
-      var exCnt = MUSCLE_EX_COUNT[mk] || 2;
-      var candidates = avail.filter(function(e) {
-        return tgtM.indexOf(e.muscle) >= 0 && !dayUsed[e.name];
+  for (var i = 0; i < Math.min(splitPlan.length, freqPerWeek); i++) {
+    var day = splitPlan[i];
+    var dayExercises = [];
+
+    for (var m = 0; m < day.muscles.length; m++) {
+      var muscle = day.muscles[m];
+      var candidates = availExercises.filter(function(e) {
+        return (e.muscle === muscle || e.muscle === 'full') && !usedExercises[e.name];
       });
-      // Fallback: if strength filter removed too many, use full pool for this muscle
-      if (candidates.length < exCnt) {
-        candidates = allExercises.filter(function(e) {
-          return tgtM.indexOf(e.muscle) >= 0 && !dayUsed[e.name];
+      if (candidates.length === 0) {
+        candidates = availExercises.filter(function(e) {
+          return e.muscle === muscle && !usedExercises[e.name];
         });
       }
-      // Sort: prefer globally-unused exercises first, then by intensity
-      // Non-strength: light shuffle for variety between goals
-      if (cfg.intensity !== 'high') {
-        for (var si = candidates.length - 1; si > 0; si--) {
-          var sj = Math.floor(Math.random() * (si + 1));
-          var tmp = candidates[si]; candidates[si] = candidates[sj]; candidates[sj] = tmp;
-        }
-      }
-      candidates.sort(function(a, b) {
-        var aUsed = globalUsed[a.name] ? 100 : 0;
-        var bUsed = globalUsed[b.name] ? 100 : 0;
-        if (cfg.intensity === 'high')
-          return (aUsed || -a.difficulty * 20) - (bUsed || -b.difficulty * 20);
-        return (aUsed || a.difficulty) - (bUsed || b.difficulty);
+      if (candidates.length === 0) continue;
+      candidates.sort(function(a, b) { return a.difficulty - b.difficulty; });
+      var selected = candidates[0];
+      usedExercises[selected.name] = true;
+      dayExercises.push({
+        name: selected.name,
+        sets: config.setCount,
+        reps: selected.reps || config.repsRange,
+        rest: selected.rest || config.restTime,
       });
-      for (var c = 0; c < Math.min(exCnt, candidates.length); c++) {
-        var sel = candidates[c];
-        dayUsed[sel.name] = true;
-        globalUsed[sel.name] = (globalUsed[sel.name] || 0) + 1;
-        var adjSets = sel.sets + cfg.setBonus; if (adjSets < 2) adjSets = 2;
-        var adjRest = Math.round(sel.rest * cfg.restMod); if (adjRest < 15) adjRest = 15;
-        dayExs.push({
-          name: sel.name, sets: adjSets, reps: scaleR(sel.reps, cfg.repMod),
-          rest: adjRest, muscle: sel.muscle, difficulty: sel.difficulty
-        });
-      }
     }
+
+    while (dayExercises.length < 5 && availExercises.length > dayExercises.length) {
+      var unused = availExercises.filter(function(e) { return !usedExercises[e.name]; });
+      if (unused.length === 0) break;
+      var ex = unused[0];
+      usedExercises[ex.name] = true;
+      dayExercises.push({
+        name: ex.name,
+        sets: config.setCount,
+        reps: ex.reps || config.repsRange,
+        rest: ex.rest || config.restTime,
+      });
+    }
+
+    plan.push({ name: day.name, exercises: dayExercises, isRest: false });
+  }
+
+  while (plan.length < freqPerWeek) {
     plan.push({
-      name: tpl.name, exercises: dayExs, isRest: false,
-      dayNum: d + 1, goal: goalId, goalInfo: cfg.info
+      name: '休息/拉伸',
+      exercises: [
+        { name:'全身拉伸', sets:1, reps:'10分钟', rest:0 },
+        { name:'泡沫轴放松', sets:1, reps:'5分钟', rest:0 },
+      ],
+      isRest: true,
     });
   }
   return plan;
@@ -1464,6 +868,7 @@ var state = {
   onboardingDone: false,
   equipment: 'band',
   goal: 'muscle',
+  freqPerWeek: 4,
   plan: [],
   planStartDate: null,
   weights: [],
@@ -1480,19 +885,12 @@ function todayStr() {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
-function showToast(msg, showAction, actionCallback) {
+function showToast(msg) {
   var t = document.getElementById('toast');
   if (!t) return;
   t.textContent = msg;
   t.classList.add('show');
-  if (showAction && actionCallback) {
-    t.style.cursor = 'pointer';
-    t.onclick = function() { t.classList.remove('show'); actionCallback(); };
-  } else {
-    t.style.cursor = '';
-    t.onclick = null;
-  }
-  setTimeout(function() { t.classList.remove('show'); t.onclick = null; }, showAction ? 5000 : 2000);
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
 
 function saveState() {
@@ -1553,12 +951,27 @@ function initOnboarding() {
       goalOpt.appendChild(card);
     }
   }
+
+  var freqOpt = document.getElementById('onboardingFreqOptions');
+  if (freqOpt) {
+    freqOpt.innerHTML = '';
+    [3,4,5,6].forEach(function(f) {
+      var card = document.createElement('div');
+      card.className = 'freq-card' + (onboardingSelections.freq === f ? ' selected' : '');
+      card.innerHTML = '<div class="freq-num">' + f + '</div><div class="freq-label">天/周</div>';
+      (function(ff) {
+        card.onclick = function() { onboardingSelections.freq = ff; initOnboarding(); };
+      })(f);
+      freqOpt.appendChild(card);
+    });
+  }
 }
 
 function completeOnboarding() {
   state.equipment = onboardingSelections.equip;
   state.goal = onboardingSelections.goal;
-  state.plan = generatePlan(state.equipment, state.goal);
+  state.freqPerWeek = onboardingSelections.freq;
+  state.plan = generatePlan(state.equipment, state.goal, state.freqPerWeek);
   state.planStartDate = todayStr();
   state.onboardingDone = true;
   var h = document.getElementById('onboardingHeight').value;
@@ -1578,14 +991,7 @@ function initApp() {
     return;
   }
   if (!state.plan || state.plan.length === 0) {
-    state.plan = generatePlan(state.equipment, state.goal);
-    saveState();
-  }
-  // Auto-migrate: if old plan length != 9, regenerate with new 9-day cycle
-  if (state.plan && state.plan.length !== NINE_DAY_TEMPLATE.length) {
-    var oldStartDate = state.planStartDate;
-    state.plan = generatePlan(state.equipment, state.goal);
-    if (oldStartDate) state.planStartDate = oldStartDate;
+    state.plan = generatePlan(state.equipment, state.goal, state.freqPerWeek);
     saveState();
   }
   renderToday();
@@ -1600,11 +1006,7 @@ function initApp() {
 // ===== Page Navigation =====
 function showPage(pageId) {
   var pages = document.querySelectorAll('.page');
-  for (var i = 0; i < pages.length; i++) {
-    pages[i].classList.remove('active');
-    // 清除所有内联样式，确保CSS类完全控制样式
-    pages[i].style.cssText = '';
-  }
+  for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
   var target = document.getElementById('page-' + pageId);
   if (target) target.classList.add('active');
   var navItems = document.querySelectorAll('.nav-item');
@@ -1627,8 +1029,7 @@ function getTodayPlanDay() {
   var start = new Date(state.planStartDate);
   var now = new Date();
   var diffDays = Math.floor((now - start) / (1000*60*60*24));
-  // Fixed 9-day cycle
-  return Math.max(0, diffDays) % 9;
+  return Math.max(0, diffDays) % state.plan.length;
 }
 
 function renderToday() {
@@ -1685,13 +1086,12 @@ function renderToday() {
     return;
   }
   if (startBtn) startBtn.style.display = 'block';
-  var dayLabel = 'Day ' + (dayPlan.dayNum || (dayIdx+1)) + ' · ';
   if (dayPlan.isRest) {
-    if (titleEl) titleEl.textContent = dayLabel + dayPlan.name;
+    if (titleEl) titleEl.textContent = dayPlan.name;
     if (tagEl) { tagEl.textContent = '休息日'; tagEl.className = 'today-workout-tag tag-rest'; }
     if (startBtn) { startBtn.textContent = '🧘 今日休息'; startBtn.className = 'start-workout-btn rest-day'; }
   } else {
-    if (titleEl) titleEl.textContent = dayLabel + dayPlan.name;
+    if (titleEl) titleEl.textContent = dayPlan.name;
     if (tagEl) { tagEl.textContent = '训练日'; tagEl.className = 'today-workout-tag tag-training'; }
     if (startBtn) { startBtn.textContent = '开始训练 ⚡'; startBtn.className = 'start-workout-btn'; }
   }
@@ -1708,128 +1108,7 @@ function renderToday() {
         + '<div class="exercise-sets">' + ex.sets + '组 × ' + ex.reps + (typeof ex.reps === 'string' && ex.reps.indexOf('秒') === -1 ? '次' : '') + '（休息' + (ex.rest || 60) + '秒）</div></div>';
       listEl.appendChild(item);
     }
-
-    // ===== Update Ring Progress =====
-    var totalEx = dayPlan.exercises ? dayPlan.exercises.length : 0;
-    var doneEx = 0;
-    if (todayLog && todayLog.exercises) {
-      for (var ei = 0; ei < todayLog.exercises.length; ei++) {
-        if (todayLog.exercises[ei] === true) doneEx++;
-      }
-    }
-    var pct = totalEx > 0 ? Math.round((doneEx / totalEx) * 100) : 0;
-    var ringFill = document.getElementById('todayRingFill');
-    var ringPct = document.getElementById('todayRingPct');
-    if (ringFill) {
-      var circ = 440;
-      ringFill.style.strokeDashoffset = String(circ - (pct / 100) * circ);
-    }
-    if (ringPct) { ringPct.textContent = pct + '%'; }
-
-  // Update completion sub-text
-  var ringSub = document.getElementById('todayRingSub');
-  if (ringSub && dayPlan && dayPlan.exercises) {
-    var totalEx = dayPlan.exercises.length;
-    var doneEx = 0;
-    if (todayKey && state.trainingLog[todayKey] && state.trainingLog[todayKey].exercises) {
-      for (var ei = 0; ei < totalEx; ei++) {
-        if (state.trainingLog[todayKey].exercises[ei]) doneEx++;
-      }
-    }
-    if (totalEx > 0) {
-      ringSub.textContent = doneEx + '/' + totalEx + ' 动作完成';
-    } else {
-      ringSub.textContent = dayPlan.isRest ? '休息日' : '今日休息';
-    }
-  } else if (ringSub) {
-    ringSub.textContent = '0/0 动作完成';
   }
-  }
-
-  // Render Day Cycle Navigation
-  renderDayCycleNav();
-
-  // Render Training Tips
-  renderTrainingTips(dayPlan);
-}
-
-// Render Day 1-9 Cycle Navigation Bar
-function renderDayCycleNav() {
-  var navEl = document.getElementById('dayCycleNav');
-  if (!navEl || !state.plan || state.plan.length === 0) return;
-
-  navEl.innerHTML = '';
-  var todayIdx = getTodayPlanDay();
-
-  for (var i = 0; i < state.plan.length; i++) {
-    var dayPlan = state.plan[i];
-    var pill = document.createElement('div');
-
-    var isToday = (i === todayIdx);
-    var isRest = dayPlan.isRest || false;
-    var dayNum = dayPlan.dayNum || (i + 1);
-
-    pill.className = 'day-pill' + (isToday ? ' active' : '') + (isRest ? ' rest' : '');
-
-    // Pill content: "DayX" label + number below
-    pill.innerHTML = '<span class="day-pill-label">Day' + dayNum + '</span><span class="day-pill-num">' + dayNum + '</span>';
-
-    (function(idx, dNum) {
-      pill.onclick = function() {
-        if (idx === todayIdx) return;
-        var targetDay = state.plan[idx];
-        showToast('Day ' + dNum + ' · ' + targetDay.name + (targetDay.isRest ? '（休息日）' : ''));
-      };
-    })(i, dayNum);
-
-    navEl.appendChild(pill);
-  }
-}
-
-// Render Today's Training Tips based on workout type
-function renderTrainingTips(dayPlan) {
-  var tipsCard = document.getElementById('todayTipsCard');
-  var tipsContent = document.getElementById('todayTipsContent');
-  
-  if (!tipsCard || !tipsContent) return;
-  
-  if (!dayPlan) {
-    tipsCard.style.display = 'none';
-    return;
-  }
-  
-  tipsCard.style.display = 'block';
-  
-  // Determine which tip set to use based on day name
-  var tipKey = '休息日';
-  if (!dayPlan.isRest) {
-    var name = dayPlan.name || '';
-    if (name.indexOf('胸') >= 0) tipKey = '胸';
-    else if (name.indexOf('背') >= 0) tipKey = '背';
-    else if (name.indexOf('肩') >= 0) tipKey = '肩';
-    else if (name.indexOf('腹') >= 0) tipKey = '腹';
-    else if (name.indexOf('腿') >= 0 || name.indexOf('臀') >= 0) tipKey = '腿+臀';
-  }
-  
-  var tips = TRAINING_TIPS[tipKey];
-  if (!tips) {
-    tipsCard.style.display = 'none';
-    return;
-  }
-  
-  var html = '';
-  // Show first 2 tips as flowing text (matching screenshot style)
-  var maxShow = Math.min(2, tips.tips.length);
-  for (var t = 0; t < maxShow; t++) {
-    html += tips.tips[t];
-    if (t < maxShow - 1) html += '。';
-  }
-  html += '。';
-  if (tips.warning) {
-    html += '<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,255,106,0.15);font-size:12px;color:#ff9500;">' + tips.warning + '</div>';
-  }
-  
-  tipsContent.innerHTML = html;
 }
 
 function toggleTodayExercise(dayIdx, exIdx) {
@@ -1848,7 +1127,7 @@ function toggleWalk() {
   state.trainingLog[key].walk = !state.trainingLog[key].walk;
   saveState();
   renderToday();
-  showToast(state.trainingLog[key].walk ? '步行打卡完成！+300卡路里' : '已取消步行打卡');
+  showToast(state.trainingLog[key].walk ? '步行打卡完成！+300kcal' : '已取消步行打卡');
 }
 
 // ===== Workout Active =====
@@ -1856,19 +1135,8 @@ function startWorkout() {
   var dayIdx = getTodayPlanDay();
   var dayPlan = state.plan[dayIdx];
   if (!dayPlan || dayPlan.isRest) { showToast('今天是休息日，好好恢复！'); return; }
-  // Check if already completed today
-  var todayKey = todayStr();
-  if (state.trainingLog[todayKey] && state.trainingLog[todayKey].completed) {
-    showToast('🎉 今天的训练已完成！明天继续加油！');
-    return;
-  }
-  // Only show warmup prompt if no progress today
-  if (!state.trainingLog[todayKey] || !state.trainingLog[todayKey].exercises || !state.trainingLog[todayKey].exercises.some(function(e) { return e; })) {
-    showToast('🔥 训练前请先热身5-10分钟，激活关节和肌肉！');
-  }
   state.activeDayIdx = dayIdx;
   state.activeExIdx = 0;
-  state.activeSetIdx = 0;
   var overlay = document.getElementById('workoutActive');
   if (overlay) overlay.classList.add('active');
   var nav = document.getElementById('bottomNav');
@@ -1916,19 +1184,12 @@ function nextExercise() {
   if (!state.trainingLog[todayKey].exercises) state.trainingLog[todayKey].exercises = [];
   state.trainingLog[todayKey].exercises[state.activeExIdx] = true;
   saveState();
-
-  // Check if this is the last set of current exercise
-  // If not last set, just show "set complete" hint and let user continue
-  // For simplicity, we move to next exercise with rest timer
-
   state.activeExIdx++;
   if (state.activeExIdx >= dayPlan.exercises.length) {
     completeWorkout();
   } else {
-    // Start rest timer before showing next exercise
-    var nextEx = dayPlan.exercises[state.activeExIdx];
-    var restTime = nextEx.rest || 60;
-    showRestTimer(restTime);
+    renderActiveExercise();
+    resetTimer();
   }
 }
 
@@ -1940,52 +1201,15 @@ function completeWorkout() {
   clearInterval(state.activeTimerInterval);
   var statsEl = document.getElementById('completeStats');
   if (statsEl) statsEl.textContent = '用时 ' + formatTime(state.activeTimerSec);
-  // Mark as completed
-  var todayKey = todayStr();
-  if (!state.trainingLog[todayKey]) state.trainingLog[todayKey] = { dayIdx: state.activeDayIdx, exercises: [], walk: false };
-  state.trainingLog[todayKey].completed = true;
-  saveState();
-  // Show weight prompt button if weight not recorded today
-  var weightRecorded = state.weights && state.weights.some(function(w) { return w.date === todayKey; });
-  var weightBtn = document.getElementById('completeWeightBtn');
-  if (weightBtn) weightBtn.style.display = weightRecorded ? 'none' : 'block';
-
-  // Show post-workout nutrition tip
-  setTimeout(function() {
-    showToast('🥚 训练后30分钟内补充蛋白质（如蛋白粉/鸡蛋），帮助肌肉恢复');
-  }, 1000);
 }
 
 function exitWorkout() {
-  // Confirm before exiting if workout is in progress
-  var todayKey = todayStr();
-  var hasProgress = state.trainingLog[todayKey] && state.trainingLog[todayKey].exercises && state.trainingLog[todayKey].exercises.some(function(v) { return v; });
-  if (hasProgress && !confirm('确定要退出训练吗？已完成的动作已自动保存。')) {
-    return;
-  }
-
-  // Save current progress before exiting
-  if (!state.trainingLog[todayKey]) state.trainingLog[todayKey] = { dayIdx: state.activeDayIdx, exercises: [], walk: false };
-  if (!state.trainingLog[todayKey].exercises) state.trainingLog[todayKey].exercises = [];
-  var dayPlan = state.plan[state.activeDayIdx];
-  if (dayPlan && dayPlan.exercises) {
-    for (var ei = 0; ei < state.activeExIdx; ei++) {
-      if (!state.trainingLog[todayKey].exercises[ei]) state.trainingLog[todayKey].exercises[ei] = true;
-    }
-  }
-  saveState();
-
   clearInterval(state.activeTimerInterval);
   var overlay = document.getElementById('workoutActive');
   if (overlay) overlay.classList.remove('active');
   var nav = document.getElementById('bottomNav');
   if (nav) nav.style.display = 'flex';
   renderToday();
-  // Prompt to record weight if not recorded today
-  var weightRecorded = state.weights && state.weights.some(function(w) { return w.date === todayKey; });
-  if (!weightRecorded) {
-    showToast('📊 要记录今日体重吗？', true, function() { switchPage('data'); });
-  }
 }
 
 function startTimer() {
@@ -2013,71 +1237,10 @@ function formatTime(sec) {
   return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
 }
 
-// ===== Rest Timer for between sets/exercises =====
-var restTimerInterval = null;
-var restTimerActive = false;
-
-function showRestTimer(seconds) {
-  if (restTimerActive) return; // Prevent duplicate timers
-  restTimerActive = true;
-  var wrap = document.getElementById('restTimerWrap');
-  var display = document.getElementById('restTimerDisplay');
-  var setBtns = document.getElementById('activeSetBtns');
-  var nextBtn = document.getElementById('activeNextBtn');
-  var exNameEl = document.getElementById('activeExName');
-
-  if (!wrap || !display) { renderActiveExercise(); return; }
-
-  // Hide exercise content, show rest timer
-  if (setBtns) setBtns.style.display = 'none';
-  if (nextBtn) nextBtn.style.display = 'none';
-  if (exNameEl) exNameEl.style.opacity = '0.5';
-
-  wrap.style.display = 'block';
-  display.textContent = seconds;
-
-  clearInterval(restTimerInterval);
-  restTimerInterval = setInterval(function() {
-    seconds--;
-    if (seconds <= 0) {
-      clearInterval(restTimerInterval);
-      restTimerActive = false;
-      hideRestTimer();
-      renderActiveExercise();
-      showToast('💪 休息结束！保持专注，继续加油！');
-    } else {
-      display.textContent = seconds;
-    }
-  }, 1000);
-}
-
-function skipRestTimer() {
-  clearInterval(restTimerInterval);
-  restTimerActive = false;
-  hideRestTimer();
-  renderActiveExercise();
-}
-
-function hideRestTimer() {
-  var wrap = document.getElementById('restTimerWrap');
-  var exNameEl = document.getElementById('activeExName');
-  var setBtns = document.getElementById('activeSetBtns');
-  var nextBtn = document.getElementById('activeNextBtn');
-  if (wrap) wrap.style.display = 'none';
-  if (exNameEl) exNameEl.style.opacity = '1';
-  // Restore buttons visibility
-  if (setBtns) setBtns.style.display = 'flex';
-  if (nextBtn) nextBtn.style.display = 'block';
-}
-
 // ===== Plan Page =====
 function renderPlan() {
   var badge = document.getElementById('planEquipBadge');
-  if (badge) { var eq = EQUIPMENT[state.equipment] || EQUIPMENT['band']; badge.textContent = eq.icon + ' ' + eq.name; }
-  var goalBadge = document.getElementById('planGoalBadge');
-  if (goalBadge) { var g = GOALS[state.goal] || GOALS['muscle']; goalBadge.textContent = g.icon + ' ' + g.name; }
-  var goalInfoEl = document.getElementById('planGoalInfo');
-  if (goalInfoEl && state.plan.length > 0) { goalInfoEl.textContent = state.plan[0].goalInfo || ''; }
+  if (badge) badge.textContent = (EQUIPMENT[state.equipment] || {}).name || '拉力绳';
   var list = document.getElementById('planDayList');
   if (!list) return;
   list.innerHTML = '';
@@ -2093,7 +1256,7 @@ function renderPlan() {
     var isToday = (i === todayDayIdx);
     var headerHtml = '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #222;cursor:pointer;" onclick="togglePlanDay(' + i + ')">'
       + '<div><div class="plan-day-name' + (day.isRest ? ' plan-day-rest' : '') + '">'
-      + (isToday ? '⚡ ' : '') + 'Day ' + (day.dayNum || (i+1)) + ' · ' + day.name
+      + (isToday ? '⚡ ' : '') + 'Day ' + (i+1) + ': ' + day.name
       + '</div><div class="plan-day-num">' + day.exercises.length + ' 个动作' + (day.isRest ? ' · 休息日' : '') + '</div></div>'
       + '<div style="color:var(--text-secondary);font-size:12px;" id="planArrow' + i + '">▼</div></div>';
     var exHtml = '<div class="plan-day-exercises" id="planExercises' + i + '">';
@@ -2122,38 +1285,27 @@ function togglePlanDay(i) {
 var modalSelections = { equip: 'band', goal: 'muscle' };
 
 function showEquipModal() {
-  // Only initialize modalSelections from state when modal is not already active
-  var modal = document.getElementById('equipModal');
-  if (!modal || !modal.classList.contains('active')) {
-    modalSelections.equip = state.equipment;
-    modalSelections.goal = state.goal;
-  }
-  renderEquipGrid();
-  selectModalGoal(modalSelections.goal);
-  if (modal) modal.classList.add('active');
-}
-
-function renderEquipGrid() {
+  modalSelections.equip = state.equipment;
+  modalSelections.goal = state.goal;
   var grid = document.getElementById('modalEquipGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  var keys = ['band','dumbbell','barbell','bodyweight','kettlebell','mixed'];
-  for (var i = 0; i < keys.length; i++) {
-    var eq = EQUIPMENT[keys[i]];
-    if (!eq) continue;
-    var card = document.createElement('div');
-    card.className = 'equip-card' + (modalSelections.equip === eq.id ? ' selected' : '');
-    card.innerHTML = '<div class="equip-icon">' + eq.icon + '</div><div class="equip-name">' + eq.name + '</div>';
-    (function(eqId) {
-      card.onclick = function() { selectEquipInModal(eqId); };
-    })(eq.id);
-    grid.appendChild(card);
+  if (grid) {
+    grid.innerHTML = '';
+    var keys = ['band','dumbbell','barbell','bodyweight','kettlebell','mixed'];
+    for (var i = 0; i < keys.length; i++) {
+      var eq = EQUIPMENT[keys[i]];
+      if (!eq) continue;
+      var card = document.createElement('div');
+      card.className = 'equip-card' + (modalSelections.equip === eq.id ? ' selected' : '');
+      card.innerHTML = '<div class="equip-icon">' + eq.icon + '</div><div class="equip-name">' + eq.name + '</div>';
+      (function(eqId) {
+        card.onclick = function() { modalSelections.equip = eqId; showEquipModal(); };
+      })(eq.id);
+      grid.appendChild(card);
+    }
   }
-}
-
-function selectEquipInModal(eqId) {
-  modalSelections.equip = eqId;
-  renderEquipGrid();
+  selectModalGoal(modalSelections.goal);
+  var modal = document.getElementById('equipModal');
+  if (modal) modal.classList.add('active');
 }
 
 function selectModalGoal(goalId) {
@@ -2174,7 +1326,7 @@ function selectModalGoal(goalId) {
 function applyEquipSwitch() {
   state.equipment = modalSelections.equip;
   state.goal = modalSelections.goal;
-  state.plan = generatePlan(state.equipment, state.goal);
+  state.plan = generatePlan(state.equipment, state.goal, state.freqPerWeek);
   saveState();
   hideEquipModal();
   renderPlan();
@@ -2229,12 +1381,12 @@ function renderDiet() {
     var html = '<div class="diet-meal-header" onclick="toggleMealSection(\'' + mealKey + '\')">'
       + '<div><span style="font-size:16px;margin-right:6px;">' + mealIcons[mealKey] + '</span>'
       + '<span class="diet-meal-name">' + mealNames[mealKey] + '</span></div>'
-      + '<div class="diet-meal-cal">' + mealCal + ' 卡路里</div></div>';
+      + '<div class="diet-meal-cal">' + mealCal + ' kcal</div></div>';
     html += '<div id="mealSection_' + mealKey + '" style="display:' + expanded + ';">';
     for (var f = 0; f < mealItems.length; f++) {
       var food = mealItems[f];
       html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a;font-size:13px;">'
-        + '<span>' + food.name + '</span><span style="color:var(--text-green);">' + food.cal + ' 卡路里</span></div>';
+        + '<span>' + food.name + '</span><span style="color:var(--text-green);">' + food.cal + ' kcal</span></div>';
     }
     html += '<div class="diet-meal-add" onclick="showAddFoodDialog(\'' + mealKey + '\')">+ 添加食物</div>';
     html += '</div>';
@@ -2249,51 +1401,25 @@ function renderDiet() {
         var btn = document.createElement('button');
         btn.className = 'quick-food-btn';
         btn.textContent = food.name;
-        btn.onclick = function() { 
-          var selectedMeal = state.quickMealTarget || 'lunch';
-          addFood(selectedMeal, food); 
-        };
+        btn.onclick = function() { addFood('lunch', food); };
         quickList.appendChild(btn);
       })(FOOD_DB[f]);
     }
   }
-  
-  // Set default meal selection
-  state.quickMealTarget = state.quickMealTarget || 'lunch';
-  updateQuickMealUI();
   var bmr = calcBMR();
   var tdee = calcTDEE();
   var recommended = (state.goal === 'weight_loss') ? tdee - 300 : tdee + 300;
   var calText = document.getElementById('dietCalText');
-  if (calText) calText.textContent = totalCal + ' / ' + recommended + ' 卡路里';
+  if (calText) calText.textContent = totalCal + ' / ' + recommended + ' kcal';
   var intakeText = document.getElementById('dietIntakeText');
-  if (intakeText) intakeText.textContent = '摄入: ' + totalCal + ' 卡路里';
+  if (intakeText) intakeText.textContent = '摄入: ' + totalCal + ' kcal';
   var burnText = document.getElementById('dietBurnText');
-  if (burnText) burnText.textContent = '消耗: ~' + tdee + ' 卡路里';
+  if (burnText) burnText.textContent = '消耗: ~' + tdee + ' kcal';
   var fill = document.getElementById('dietCalFill');
   if (fill) {
     var pct = Math.min(100, (totalCal / recommended) * 100);
     fill.style.width = pct + '%';
     fill.className = 'diet-cal-fill' + (totalCal > recommended + 200 ? ' surplus' : ' deficit');
-  }
-}
-
-function setQuickMeal(mealKey) {
-  state.quickMealTarget = mealKey;
-  saveState();
-  updateQuickMealUI();
-}
-
-function updateQuickMealUI() {
-  var mealKeys = ['breakfast','lunch','dinner'];
-  for (var i = 0; i < mealKeys.length; i++) {
-    var btn = document.querySelector('[data-meal="' + mealKeys[i] + '"]');
-    if (btn) {
-      var isSelected = (state.quickMealTarget === mealKeys[i]);
-      btn.style.background = isSelected ? 'rgba(0,255,106,0.15)' : '#222';
-      btn.style.borderColor = isSelected ? '#00ff6a' : '#333';
-      btn.style.color = isSelected ? '#00ff6a' : '#888';
-    }
   }
 }
 
@@ -2310,7 +1436,7 @@ function addFood(mealKey, food) {
 function showAddFoodDialog(mealKey) {
   var foodName = prompt('输入食物名称：');
   if (!foodName) return;
-  var cal = parseInt(prompt('热量（卡路里）：')) || 0;
+  var cal = parseInt(prompt('热量（kcal）：')) || 0;
   var protein = parseInt(prompt('蛋白质（g，选填）：')) || 0;
   addFood(mealKey, { name: foodName, cal: cal, protein: protein });
 }
@@ -2338,20 +1464,6 @@ function renderData() {
   state.waterIntake = todayData;
   var waterEl = document.getElementById('waterAmount');
   if (waterEl) waterEl.textContent = state.waterIntake;
-}
-
-
-function toggleMeasurements() {
-  var body = document.getElementById('measBody');
-  var toggle = document.getElementById('measToggle');
-  if (!body) return;
-  if (body.style.display === 'none') {
-    body.style.display = 'block';
-    if (toggle) toggle.textContent = '▼';
-  } else {
-    body.style.display = 'none';
-    if (toggle) toggle.textContent = '▶';
-  }
 }
 
 function addWeight() {
@@ -2491,9 +1603,7 @@ function renderStats() {
   var weekRateEl = document.getElementById('statsWeekRate');
   if (weekRateEl) weekRateEl.textContent = weekRate + '%';
   var monthComplete = getMonthCompletedCount();
-  var now = new Date();
-  var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  var monthRateVal = Math.round((monthComplete / daysInMonth) * 100);
+  var monthRateVal = Math.round((monthComplete / Math.min(30, ((state.plan || []).length || 1) * 4)) * 100);
   var monthRateEl = document.getElementById('statsMonthRate');
   if (monthRateEl) monthRateEl.textContent = monthRateVal + '%';
   if (state.weights && state.weights.length >= 2) {
@@ -2506,45 +1616,6 @@ function renderStats() {
       changeEl.style.color = change > 0 ? '#ff6a00' : '#00ff6a';
     }
   }
-
-  // ===== Update Ring Fills =====
-  // Streak ring: max 30 days shown on ring, cap at 100%
-  var ringStreakFill = document.getElementById('ringStreakFill');
-  if (ringStreakFill) {
-    var streakPct = Math.min(100, streak * 3.33); // 30 days = 100%
-    ringStreakFill.style.strokeDashoffset = String(264 - (streakPct / 100) * 264);
-  }
-
-  // Total workouts ring: max 50 = 100%
-  var ringTotalFill = document.getElementById('ringTotalFill');
-  if (ringTotalFill) {
-    var totalPct = Math.min(100, total * 2);
-    ringTotalFill.style.strokeDashoffset = String(264 - (totalPct / 100) * 264);
-  }
-
-  // Week rate ring: direct %
-  var ringWeekFill = document.getElementById('ringWeekFill');
-  if (ringWeekFill) {
-    ringWeekFill.style.strokeDashoffset = String(264 - (weekRate / 100) * 264);
-  }
-
-  // Week rate small label
-  var weekRateSmallEl = document.getElementById('statsWeekRateSmall');
-  if (weekRateSmallEl) weekRateSmallEl.textContent = weekRate + '%';
-
-  // Weight change ring: show as +/- offset from center
-  var ringWeightFill = document.getElementById('ringWeightFill');
-  if (ringWeightFill && state.weights && state.weights.length >= 2) {
-    var wFirst = state.weights[0].value;
-    var wLast = state.weights[state.weights.length - 1].value;
-    var wChange = wLast - wFirst;
-    // Map -5kg to +5kg onto ring range
-    var wPct = 50 + (wChange / 5) * 50; // -5kg=0%, 0kg=50%, +5kg=100%
-    wPct = Math.max(0, Math.min(100, wPct));
-    ringWeightFill.style.strokeDashoffset = String(264 - (wPct / 100) * 264);
-    ringWeightFill.style.stroke = wChange > 0 ? '#ff6a00' : (wChange < 0 ? '#00ff6a' : '#888');
-  }
-
   var weekGrid = document.getElementById('statsWeekGrid');
   if (weekGrid) {
     weekGrid.innerHTML = '';

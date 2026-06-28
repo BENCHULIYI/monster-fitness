@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Gradient background -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="greenGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff6a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00cc55;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00ff6a;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#00ff6a;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="120" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle green glow in center -->
+  <circle cx="256" cy="256" r="200" fill="url(#centerGlow)"/>
+  
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="url(#greenGlow)" stroke-width="4" opacity="0.6"/>
+  
+  <!-- Modern dumbbell icon -->
+  <!-- Left weight plate -->
+  <rect x="140" y="200" width="60" height="112" rx="12" fill="url(#greenGlow)" opacity="0.9"/>
+  <rect x="148" y="212" width="44" height="88" rx="8" fill="#0a0a0a" opacity="0.3"/>
+  
+  <!-- Right weight plate -->
+  <rect x="312" y="200" width="60" height="112" rx="12" fill="url(#greenGlow)" opacity="0.9"/>
+  <rect x="320" y="212" width="44" height="88" rx="8" fill="#0a0a0a" opacity="0.3"/>
+  
+  <!-- Center bar -->
+  <rect x="200" y="238" width="112" height="36" rx="18" fill="url(#greenGlow)" filter="url(#glow)"/>
+  <rect x="208" y="244" width="96" height="24" rx="12" fill="#0a0a0a" opacity="0.2"/>
+  
+  <!-- Lightning bolt in center (energy/power symbol) -->
+  <g filter="url(#glow)">
+    <path d="M 245 220 L 265 220 L 255 250 L 275 250 L 235 300 L 250 260 L 235 260 Z" 
+          fill="#0a0a0a" stroke="url(#greenGlow)" stroke-width="3"/>
+  </g>
+  
+  <!-- Bottom text: 怪兽 -->
+  <text x="256" y="430"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="38"
+        font-weight="bold"
+        fill="url(#greenGlow)"
+        text-anchor="middle"
+        opacity="0.8">怪兽训练</text>
+  
+  <!-- Subtle corner accents -->
+  <circle cx="80" cy="80" r="4" fill="#00ff6a" opacity="0.3"/>
+  <circle cx="432" cy="80" r="4" fill="#00ff6a" opacity="0.3"/>
+  <circle cx="80" cy="432" r="4" fill="#00ff6a" opacity="0.3"/>
+  <circle cx="432" cy="432" r="4" fill="#00ff6a" opacity="0.3"/>
+  
+  <!-- Green glow effect on edges -->
+  <rect width="512" height="512" rx="120" fill="none" stroke="#00ff6a" stroke-width="2" opacity="0.15"/>
+</svg>
