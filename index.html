@@ -361,23 +361,21 @@ body {
   height:var(--nav-height);
   background:var(--bg-secondary);
   border-top:1px solid #222;
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5px); /* 增加额外间距 */
+  /* 使用固定间距替代env()，避免PWA模式下计算错误 */
+  padding-bottom: 8px;
   flex-shrink:0;
   max-width:480px;
-  margin:0 auto;
+  margin: 0 auto;
   width:100%;
   box-sizing:border-box;
-  position: fixed; /* 固定定位，确保完全贴底 */
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .nav-item {
   flex:1; display:flex; flex-direction:column; align-items:center;
   cursor:pointer; color:var(--text-secondary); transition:all 0.2s; position:relative;
   -webkit-tap-highlight-color:transparent;
-  height:100%;
-  justify-content:center !important;
+  /* 不使用justify-content，改用padding来居中 */
+  padding-top: 12px !important;
+  padding-bottom: 4px !important;
 }
 .nav-item.active { color:var(--text-green); }
 .nav-item.active::before {
@@ -385,9 +383,9 @@ body {
   width:30px; height:3px; background:var(--text-green); border-radius:0 0 3px 3px;
   box-shadow:var(--glow-green);
 }
-.nav-icon { font-size:24px; margin-bottom:3px; line-height:1; }
-.nav-icon svg { width:24px; height:24px; }
-.nav-label { font-size:11px; line-height:1.1; }
+.nav-icon { font-size:24px; margin-bottom:0; line-height:1; display:block; }
+.nav-icon svg { width:24px; height:24px; display:block; }
+.nav-label { font-size:11px; line-height:1.1; margin-top:2px; }
 /* ===== Toast ===== */
 .toast {
   position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
@@ -1625,6 +1623,8 @@ function showPage(pageId) {
   if (pageId === 'stats') renderStats();
   if (pageId === 'data') renderData();
   if (pageId === 'settings') renderSettings();
+  // 强制修复导航图标居中（解决PWA模式下的问题）
+  if (window.fixNavIcons) window.fixNavIcons();
 }
 
 function switchPage(pageId) { showPage(pageId); }
@@ -2714,6 +2714,34 @@ document.addEventListener('DOMContentLoaded', function() {
     var el = document.getElementById(id);
     if (el) el.addEventListener('change', saveSettings);
   });
+
+  // 强制修复导航图标居中（解决PWA模式下的问题）
+  function fixNavIcons() {
+    var navItems = document.querySelectorAll('.nav-item');
+    for (var i = 0; i < navItems.length; i++) {
+      navItems[i].style.display = 'flex';
+      navItems[i].style.flexDirection = 'column';
+      navItems[i].style.alignItems = 'center';
+      navItems[i].style.justifyContent = 'center';
+      navItems[i].style.height = '100%';
+      navItems[i].style.padding = '0';
+    }
+
+    var navIcons = document.querySelectorAll('.nav-icon');
+    for (var i = 0; i < navIcons.length; i++) {
+      navIcons[i].style.margin = '0';
+      navIcons[i].style.display = 'block';
+    }
+  }
+
+  // 立即执行一次
+  fixNavIcons();
+
+  // 暴露到全局，供showPage()调用
+  window.fixNavIcons = fixNavIcons;
+
+  // 每500ms执行一次，确保PWA模式下也能生效
+  setInterval(fixNavIcons, 500);
 });
 </script>
 </body>
