@@ -1,0 +1,2700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>怪兽训练计划</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0a0a">
+<style>
+/* ===== CSS Variables & Reset ===== */
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-card: #1a1a1a;
+  --bg-card-hover: #222222;
+  --border-green: #00ff6a;
+  --border-orange: #ff6a00;
+  --text-primary: #e0e0e0;
+  --text-secondary: #888888;
+  --text-green: #00ff6a;
+  --text-orange: #ff6a00;
+  --glow-green: 0 0 10px rgba(0,255,106,0.3);
+  --glow-orange: 0 0 10px rgba(255,106,0,0.3);
+  --nav-height: 65px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; overflow:hidden; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: var(--bg-primary); color: var(--text-primary);
+  padding-top: var(--safe-top); padding-bottom: var(--safe-bottom);
+}
+/* ===== App Container ===== */
+.app-container { display:flex; flex-direction:column; min-height:100%; max-width:480px; margin:0 auto; position:relative; }
+/* ===== Header ===== */
+.app-header {
+  padding: 10px 16px 8px; background: var(--bg-primary);
+  border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-brand {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.header-icon {
+  font-size: 30px;
+  line-height: 1;
+  color: var(--text-green);
+  filter: drop-shadow(0 0 8px rgba(0,255,106,0.7));
+}
+.app-title { font-size: 20px; font-weight: 700; color: var(--text-green); text-shadow: 0 0 10px rgba(0,255,106,0.5); letter-spacing: 1.5px; line-height: 1.2; }
+.app-subtitle-en { font-size: 10px; color: #666; letter-spacing: 3px; margin-top: 2px; line-height: 1; }
+.app-subtitle { font-size: 10px; color: var(--text-secondary); white-space: nowrap; line-height: 1; }
+.header-right { display: flex; gap: 12px; align-items: center; }
+.header-btn { background:none; border:none; color:var(--text-green); cursor:pointer; padding:4px; }
+/* ===== Pages ===== */
+.page { display:none; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 0 calc(var(--nav-height) + var(--safe-bottom) + env(safe-area-inset-bottom, 0px) + 10px); }
+.page.active { display:block; }
+/* ===== Onboarding ===== */
+.onboarding-page {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:100vh; padding:30px 24px; text-align:center;
+}
+.onboarding-page h1 { font-size:28px; color:var(--text-green); margin-bottom:8px; text-shadow:0 0 20px rgba(0,255,106,0.5); }
+.onboarding-page p { color:var(--text-secondary); margin-bottom:30px; line-height:1.6; }
+.onboarding-step { width:100%; max-width:360px; margin-bottom:24px; text-align:left; }
+.onboarding-step h3 { color:var(--text-green); margin-bottom:12px; font-size:15px; }
+.equip-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.equip-card {
+  background:var(--bg-card); border:2px solid #333; border-radius:12px;
+  padding:14px 8px; text-align:center; cursor:pointer; transition:all 0.2s;
+}
+.equip-card:active { transform:scale(0.95); }
+.equip-card.selected { border-color:var(--text-green); box-shadow:var(--glow-green); background:#1a2a1a; }
+.equip-icon { font-size:28px; margin-bottom:6px; }
+.equip-name { font-size:12px; color:var(--text-primary); }
+.goal-options { display:flex; flex-direction:column; gap:10px; }
+.goal-card {
+  background:var(--bg-card); border:2px solid #333; border-radius:12px;
+  padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s;
+}
+.goal-card.selected { border-color:var(--text-green); box-shadow:var(--glow-green); }
+.goal-icon { font-size:24px; }
+.goal-text h4 { font-size:14px; color:var(--text-primary); }
+.goal-text p { font-size:11px; color:var(--text-secondary); margin:0; }
+.freq-options { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.freq-card {
+  background:var(--bg-card); border:2px solid #333; border-radius:10px;
+  padding:12px 6px; text-align:center; cursor:pointer; transition:all 0.2s;
+}
+.freq-card.selected { border-color:var(--text-green); box-shadow:var(--glow-green); }
+.freq-num { font-size:22px; font-weight:700; color:var(--text-green); }
+.freq-label { font-size:10px; color:var(--text-secondary); }
+.btn-primary {
+  background:linear-gradient(135deg,#00ff6a,#00cc55); color:#000; border:none;
+  border-radius:25px; padding:14px 40px; font-size:16px; font-weight:700;
+  cursor:pointer; margin-top:20px; transition:all 0.2s; letter-spacing:1px;
+}
+.btn-primary:active { transform:scale(0.96); }
+/* ===== Today Page (Home) ===== */
+.today-hero {
+  background: linear-gradient(180deg, #0f1f0f 0%, var(--bg-primary) 100%);
+  padding: 20px 16px 16px; margin-bottom: 4px;
+  position: relative;
+}
+.hero-slogan {
+  position: absolute;
+  right: 16px;
+  bottom: 10px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  letter-spacing: 1px;
+}
+.today-date { font-size:12px; color:var(--text-secondary); margin-bottom:4px; }
+.today-greeting { font-size:22px; font-weight:700; margin-bottom:4px; }
+.today-greeting span { color:var(--text-green); }
+.today-streak { display:inline-flex; align-items:center; gap:4px; background:rgba(0,255,106,0.1); border:1px solid rgba(0,255,106,0.3); border-radius:20px; padding:4px 12px; font-size:12px; color:var(--text-green); margin-top:8px; }
+/* Quick Stats Row */
+.quick-stats { display:flex; gap:8px; padding:0 16px; margin-bottom:16px; }
+.quick-stat {
+  flex:1; background:var(--bg-card); border-radius:12px; padding:12px 10px;
+  text-align:center; border:1px solid #222;
+}
+.quick-stat-value { font-size:20px; font-weight:700; color:var(--text-green); }
+.quick-stat-label { font-size:10px; color:var(--text-secondary); margin-top:2px; }
+/* Today Workout Card */
+.today-workout-card {
+  margin:0 16px 16px; background:var(--bg-card); border-radius:16px;
+  border:1px solid #222; overflow:hidden;
+}
+.today-workout-header {
+  padding:14px 16px; display:flex; justify-content:space-between; align-items:center;
+  border-bottom:1px solid #222;
+}
+.today-workout-title { font-size:15px; font-weight:600; }
+.today-workout-tag {
+  font-size:11px; padding:3px 10px; border-radius:20px; font-weight:600;
+}
+.tag-training { background:rgba(0,255,106,0.15); color:var(--text-green); border:1px solid rgba(0,255,106,0.3); }
+.tag-rest { background:rgba(255,106,0,0.15); color:var(--text-orange); border:1px solid rgba(255,106,0,0.3); }
+.today-exercise-list { padding:8px 0; }
+.today-exercise-item {
+  display:flex; align-items:center; padding:10px 16px; gap:12px;
+  border-bottom:1px solid #1a1a1a;
+}
+.today-exercise-item:last-child { border-bottom:none; }
+.exercise-checkbox {
+  width:22px; height:22px; border-radius:50%; border:2px solid #444;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:all 0.2s;
+}
+.exercise-checkbox.checked { background:var(--text-green); border-color:var(--text-green); }
+.exercise-checkbox.checked::after { content:''; width:8px; height:8px; background:#000; border-radius:50%; }
+.exercise-info { flex:1; }
+.exercise-name { font-size:14px; font-weight:500; }
+.exercise-sets { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+.exercise-checkbox.checked ~ .exercise-info .exercise-name { color:#666; text-decoration:line-through; }
+.start-workout-btn {
+  margin:12px 16px 16px; background:linear-gradient(135deg,#00ff6a,#00cc55); color:#000;
+  border:none; border-radius:12px; padding:12px; font-size:15px; font-weight:700;
+  cursor:pointer; width:calc(100% - 32px); letter-spacing:1px; transition:all 0.2s;
+}
+.start-workout-btn.rest-day { background:linear-gradient(135deg,#ff6a00,#cc5500); }
+/* Quick Action Buttons */
+.quick-actions { display:flex; gap:8px; padding:0 16px; margin-bottom:16px; }
+.quick-action {
+  flex:1; background:var(--bg-card); border:1px solid #222; border-radius:12px;
+  padding:14px 8px; text-align:center; cursor:pointer; transition:all 0.2s;
+}
+.quick-action:active { transform:scale(0.96); background:var(--bg-card-hover); }
+.quick-action-icon { font-size:22px; margin-bottom:4px; }
+.quick-action-label { font-size:11px; color:var(--text-secondary); }
+/* ===== Plan Page ===== */
+.plan-header { padding:16px; display:flex; justify-content:space-between; align-items:center; }
+.plan-title { font-size:17px; font-weight:700; }
+.plan-equip-badge-clickable { cursor:pointer; transition:all 0.2s; }
+.plan-equip-badge-clickable:active { transform:scale(0.95); background:rgba(0,255,106,0.2); }
+.plan-equip-badge {
+  background:rgba(0,255,106,0.1); border:1px solid rgba(0,255,106,0.3);
+  color:var(--text-green); padding:4px 12px; border-radius:20px; font-size:12px;
+}
+.plan-goal-badge {
+  background:rgba(0,200,255,0.1); border:1px solid rgba(0,200,255,0.3);
+  color:#00c8ff; padding:4px 12px; border-radius:20px; font-size:12px;
+  cursor:pointer; transition:all 0.2s;
+}
+.plan-goal-badge:active { transform:scale(0.95); background:rgba(0,200,255,0.2); }
+.plan-cycle-badge {
+  background:rgba(255,106,0,0.1); border:1px solid rgba(255,106,0,0.3);
+  color:var(--text-orange); padding:4px 12px; border-radius:20px; font-size:12px;
+}
+.plan-day-card {
+  margin:0 16px 12px; background:var(--bg-card); border-radius:14px;
+  border:1px solid #222; overflow:hidden;
+}
+.plan-day-header {
+  padding:12px 16px; display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer; transition:background 0.2s;
+}
+.plan-day-header:active { background:var(--bg-card-hover); }
+.plan-day-name { font-size:14px; font-weight:600; }
+.plan-day-rest { color:var(--text-orange); }
+.plan-day-num { font-size:12px; color:var(--text-secondary); }
+.plan-day-exercises { padding:0 16px 12px; display:none; }
+.plan-day-exercises.expanded { display:block; }
+.plan-exercise-row {
+  display:flex; align-items:center; padding:8px 0; gap:10px;
+  border-bottom:1px solid #1a1a1a;
+}
+.plan-exercise-row:last-child { border-bottom:none; }
+.plan-exercise-idx { font-size:12px; color:var(--text-green); width:20px; }
+.plan-exercise-name { flex:1; font-size:13px; }
+.plan-exercise-sets { font-size:11px; color:var(--text-secondary); }
+.plan-switch-btn {
+  margin:16px; background:none; border:2px solid var(--text-green); color:var(--text-green);
+  border-radius:12px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; width:calc(100% - 32px);
+  transition:all 0.2s;
+}
+.plan-switch-btn:active { background:rgba(0,255,106,0.1); }
+/* Equipment Select Modal */
+.modal-overlay {
+  position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85);
+  z-index:1000; display:none; align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.active { display:flex; }
+.modal-content {
+  background:var(--bg-secondary); border-radius:20px; padding:24px; width:100%;
+  max-width:400px; max-height:80vh; overflow-y:auto; border:1px solid #333;
+}
+.modal-title { font-size:17px; font-weight:700; margin-bottom:16px; text-align:center; }
+.modal-equip-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+.modal-btn {
+  background:linear-gradient(135deg,#00ff6a,#00cc55); color:#000; border:none;
+  border-radius:12px; padding:12px; font-size:15px; font-weight:700; cursor:pointer; width:100%;
+}
+/* ===== Workout Active Page ===== */
+.workout-active-page { display:none; flex-direction:column; height:100%; background:var(--bg-primary); position:absolute; top:0; left:0; right:0; bottom:0; z-index:500; }
+.workout-active-page.active { display:flex; }
+.workout-top-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; border-bottom:1px solid #222;
+}
+.workout-back-btn { background:none; border:none; color:var(--text-green); font-size:14px; cursor:pointer; padding:4px 8px; }
+.workout-progress-text { font-size:13px; color:var(--text-secondary); }
+.workout-progress-bar { height:3px; background:#222; }
+.workout-progress-fill { height:100%; background:var(--text-green); transition:width 0.3s; box-shadow:var(--glow-green); }
+.workout-exercise-active { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px 20px; }
+.workout-exercise-name { font-size:24px; font-weight:700; margin-bottom:8px; text-align:center; }
+.workout-exercise-sets-info { font-size:14px; color:var(--text-secondary); margin-bottom:30px; }
+.workout-timer { font-size:48px; font-weight:700; color:var(--text-green); margin-bottom:30px; font-variant-numeric:tabular-nums; text-shadow:0 0 20px rgba(0,255,106,0.3); }
+.workout-set-btns { display:flex; gap:12px; margin-bottom:20px; }
+.workout-set-btn {
+  width:60px; height:60px; border-radius:50%; border:2px solid #444; background:var(--bg-card);
+  color:var(--text-primary); font-size:14px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center;
+}
+.workout-set-btn.done { border-color:var(--text-green); color:var(--text-green); }
+.workout-next-btn {
+  background:linear-gradient(135deg,#00ff6a,#00cc55); color:#000; border:none;
+  border-radius:25px; padding:14px 50px; font-size:16px; font-weight:700; cursor:pointer; transition:all 0.2s;
+}
+.workout-complete-overlay {
+  display:none; position:absolute; top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,0.95); z-index:600; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center; padding:30px;
+}
+.workout-complete-overlay.active { display:flex; }
+.workout-complete-emoji { font-size:64px; margin-bottom:16px; }
+.workout-complete-title { font-size:24px; font-weight:700; color:var(--text-green); margin-bottom:8px; }
+/* ===== Diet Page ===== */
+.diet-date-nav { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; }
+.diet-date-btn { background:none; border:none; color:var(--text-green); font-size:18px; cursor:pointer; padding:4px 8px; }
+.diet-date-text { font-size:14px; }
+.diet-summary-card {
+  margin:0 16px 16px; background:var(--bg-card); border-radius:16px; padding:16px; border:1px solid #222;
+}
+.diet-cal-bar { height:8px; background:#222; border-radius:4px; margin:10px 0; overflow:hidden; }
+.diet-cal-fill { height:100%; border-radius:4px; transition:width 0.3s; }
+.diet-cal-fill.surplus { background:linear-gradient(90deg,#ff4444,#ff6666); }
+.diet-cal-fill.deficit { background:linear-gradient(90deg,#00ff6a,#00cc55); }
+.diet-cal-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); }
+.diet-meal-section { margin:0 16px 12px; }
+.diet-meal-header { display:flex; justify-content:space-between; align-items:center; padding:10px 0; cursor:pointer; }
+.diet-meal-name { font-size:14px; font-weight:600; }
+.diet-meal-cal { font-size:12px; color:var(--text-secondary); }
+.diet-meal-add { background:none; border:1px dashed #444; border-radius:8px; padding:8px; text-align:center; color:var(--text-green); font-size:12px; cursor:pointer; margin-top:6px; }
+.quick-foods { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.quick-food-btn {
+  background:var(--bg-card); border:1px solid #333; border-radius:8px; padding:6px 10px;
+  font-size:11px; color:var(--text-primary); cursor:pointer; transition:all 0.2s;
+}
+.quick-food-btn:active { border-color:var(--text-green); }
+/* ===== Data Page ===== */
+.data-section { margin:0 16px 20px; }
+.data-section-title { font-size:14px; font-weight:600; margin-bottom:10px; color:var(--text-green); }
+.weight-input-row { display:flex; gap:8px; margin-bottom:12px; }
+.weight-input {
+  flex:1; background:var(--bg-card); border:1px solid #333; border-radius:10px;
+  padding:10px 12px; color:var(--text-primary); font-size:14px; outline:none;
+}
+.weight-input:focus { border-color:var(--text-green); }
+.weight-input-btn {
+  background:var(--text-green); color:#000; border:none; border-radius:10px;
+  padding:10px 16px; font-weight:700; cursor:pointer; font-size:13px;
+}
+.chart-container { background:var(--bg-card); border-radius:14px; padding:12px; border:1px solid #222; margin-bottom:12px; }
+.chart-canvas { width:100%; height:200px; }
+/* ===== Stats Page ===== */
+.stats-card { margin:0 16px 16px; background:var(--bg-card); border-radius:14px; padding:16px; border:1px solid #222; }
+.stats-big-number { font-size:36px; font-weight:700; color:var(--text-green); }
+.stats-label { font-size:12px; color:var(--text-secondary); }
+.stats-row { display:flex; gap:8px; margin-top:12px; }
+.stats-mini-card { flex:1; background:var(--bg-secondary); border-radius:10px; padding:10px; text-align:center; }
+.stats-mini-value { font-size:16px; font-weight:700; }
+.stats-mini-label { font-size:10px; color:var(--text-secondary); }
+/* ===== Settings Page ===== */
+.settings-group { margin:0 16px 20px; }
+.settings-group-title { font-size:12px; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px; }
+.settings-item {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 0; border-bottom:1px solid #1a1a1a;
+}
+.settings-item:last-child { border-bottom:none; }
+.settings-item-label { font-size:14px; }
+.settings-item-value { font-size:13px; color:var(--text-secondary); }
+.settings-item-input {
+  background:var(--bg-secondary); border:1px solid #333; border-radius:8px;
+  padding:6px 10px; color:var(--text-primary); font-size:13px; width:80px; text-align:center; outline:none;
+}
+.settings-item-input:focus { border-color:var(--text-green); }
+.settings-btn {
+  display:block; width:100%; padding:12px; border-radius:12px; font-size:14px;
+  cursor:pointer; text-align:center; margin-top:6px; transition:all 0.2s;
+}
+.btn-export { background:var(--bg-card); border:1px solid #333; color:var(--text-primary); }
+.btn-reset { background:none; border:1px solid #ff4444; color:#ff4444; }
+/* ===== Bottom Nav ===== */
+.bottom-nav {
+  display:flex; height:var(--nav-height); background:var(--bg-secondary);
+  border-top:1px solid #222;
+  padding-bottom:calc(var(--safe-bottom) + env(safe-area-inset-bottom, 0px));
+  position:fixed; bottom:0; left:0; right:0; z-index:200;
+  max-width:480px; margin:0 auto; box-sizing:border-box;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-secondary); transition:all 0.2s; position:relative;
+  -webkit-tap-highlight-color:transparent;
+  padding-top: 20px;
+}
+.nav-item.active { color:var(--text-green); }
+.nav-item.active::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:30px; height:3px; background:var(--text-green); border-radius:0 0 3px 3px;
+  box-shadow:var(--glow-green);
+}
+.nav-icon { font-size:24px; margin-bottom:3px; line-height:1; }
+.nav-icon svg { width:24px; height:24px; }
+.nav-label { font-size:11px; line-height:1.1; }
+/* ===== Toast ===== */
+.toast {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+  background:var(--bg-card); color:var(--text-green); padding:10px 24px;
+  border-radius:25px; font-size:13px; font-weight:600; z-index:9999;
+  border:1px solid var(--text-green); opacity:0; transition:opacity 0.3s; pointer-events:none;
+}
+.toast.show { opacity:1; }
+/* ===== Rest Day Animation ===== */
+@keyframes restGlow {
+  0%,100% { box-shadow:0 0 5px rgba(255,106,0,0.2); }
+  50% { box-shadow:0 0 20px rgba(255,106,0,0.4); }
+}
+.rest-card { animation:restGlow 2s infinite; }
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width:0; }
+/* ===== Walk Checkin ===== */
+.walk-checkin {
+  margin:0 16px 16px; background:var(--bg-card); border-radius:12px; padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between; border:1px solid #222;
+}
+.walk-checkin.done { border-color:rgba(0,255,106,0.3); }
+.walk-icon { font-size:20px; margin-right:10px; }
+.walk-info { flex:1; }
+.walk-name { font-size:14px; font-weight:500; }
+.walk-desc { font-size:11px; color:var(--text-secondary); }
+.walk-btn {
+  background:var(--text-green); color:#000; border:none; border-radius:20px;
+  padding:6px 16px; font-size:12px; font-weight:700; cursor:pointer;
+}
+.walk-btn.done { background:rgba(0,255,106,0.2); color:var(--text-green); }
+
+/* ===== Scrollbar ===== *//* The main claw SVG */
+.claw-svg {
+  width: 60%;
+  max-width: 280px;
+  height: auto;
+  /* Will be animated via stroke-dashoffset in JS */
+}
+
+/* Claw path scratch animation - drawn from top to bottom */
+@keyframes scratchDownLeft {
+  0%   { stroke-dashoffset: 1600; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes scratchDownCenter {
+  0%   { stroke-dashoffset: 2000; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes scratchDownRight {
+  0%   { stroke-dashoffset: 1550; }
+  100% { stroke-dashoffset: 0; }
+}
+
+#clawLeft {
+  animation: scratchDownLeft 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+#clawCenter {
+  animation: scratchDownCenter 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
+#clawRight {
+  animation: scratchDownRight 0.52s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+}
+
+/* Green flash when claws finish */
+.claw-flash {
+  position: absolute; top:0; left:0; width:100%; height:100%;
+  background: radial-gradient(ellipse at center, rgba(0,255,106,0.18) 0%, transparent 70%);
+  opacity: 0;
+  animation: flashIn 0.35s ease-out 1.4s forwards, flashOut 0.6s ease-in 1.85s forwards;
+  pointer-events: none;
+}
+@keyframes flashIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes flashOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Subtle crack effect on bg */
+.claw-crack {
+  position: absolute; top:0; left:0; width:100%; height:100%;
+  pointer-events: none; opacity: 0;
+  animation: crackShow 1s ease-out 1.3s forwards;
+}
+.claw-crack::before {
+  content: '';
+  position: absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(0,255,106,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(0,255,106,0.05) 0%, transparent 50%);
+}
+@keyframes crackShow {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+/* Claw logo appears after scratch - on top */
+.intro-claw-logo {
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: logoPop 0.6s ease-out 1.6s forwards;
+  z-index: 10;
+  position: relative;
+}
+@keyframes logoPop {
+  0%   { opacity:0; transform:scale(0.5) translateY(15px); filter: blur(4px); }
+  70%  { opacity:1; transform:scale(1.08) translateY(-2px); filter: blur(0); }
+  100% { opacity:1; transform:scale(1) translateY(0); filter: blur(0); }
+}
+
+/* Title - on top of claws */
+.intro-title-wrap {
+  position: relative; z-index: 10;
+  text-align: center;
+  opacity: 0;
+  animation: titleReveal 0.7s ease-out 1.8s forwards;
+  margin-top: 0;
+}
+@keyframes titleReveal {
+  0%   { opacity:0; transform:translateY(20px) scale(0.96); filter:blur(4px); letter-spacing: 16px; }
+  70%  { opacity:1; filter:blur(0); }
+  100% { opacity:1; transform:translateY(0) scale(1); }
+}
+.intro-title {
+  font-size: 29px; font-weight: 900; color:#ddd; letter-spacing:7px;
+  text-shadow: 0 0 14px rgba(0,255,106,0.6), 0 0 40px rgba(0,255,106,0.25);
+}
+.intro-title span {
+  color:#00ff6a;
+  text-shadow: 0 0 20px rgba(0,255,106,1), 0 0 55px rgba(0,255,106,0.5);
+}
+
+/* ===== Ring Progress (Today Page) - New Layout ===== */
+.ring-progress-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 8px auto 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.ring-progress-wrap:hover { transform: scale(1.03); }
+.ring-progress-wrap:active { transform: scale(0.97); }
+.ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-bg {
+  fill: none;
+  stroke: #222;
+  stroke-width: 7;
+}
+.ring-fill {
+  fill: none;
+  stroke: #00ff6a;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: drop-shadow(0 0 6px rgba(0,255,106,0.4));
+}
+/* Stats INSIDE the ring */
+.ring-stats-below {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  width: 110px;
+}
+.ring-pct-large {
+  font-size: 34px;
+  font-weight: 800;
+  color: #00ff6a;
+  line-height: 1;
+  text-shadow: 0 0 15px rgba(0,255,106,0.5);
+}
+.ring-sub-text {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
+  line-height: 1.2;
+}
+
+/* ===== Ring Stats (Stats Page) ===== */
+.ring-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+.ring-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.ring-stat-svg-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+.ring-stat-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-stat-bg {
+  fill: none;
+  stroke: #1a1a1a;
+  stroke-width: 7;
+}
+.ring-stat-fill {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s ease;
+}
+.ring-stat-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.ring-stat-val {
+  font-size: 17px;
+  font-weight: 800;
+  color: #e0e0e0;
+  line-height: 1;
+}
+.ring-stat-label {
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+/* ===== Day 1-9 Cycle Navigation Pills (Top of page) ===== */
+.day-cycle-nav-top {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.day-cycle-nav-top::-webkit-scrollbar { display: none; }
+.day-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 42px;
+  border-radius: 8px;
+  border: 1.2px solid #333;
+  background: #1a1a1a;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 2px 6px;
+}
+.day-pill .day-pill-label {
+  font-size: 9px;
+  color: #555;
+  line-height: 1.1;
+  margin-bottom: 1px;
+}
+.day-pill .day-pill-num {
+  font-size: 16px;
+  font-weight: 700;
+  color: #777;
+  line-height: 1;
+}
+.day-pill.active {
+  border-color: #00ff6a;
+  background: rgba(0,255,106,0.08);
+  box-shadow: 0 0 8px rgba(0,255,106,0.15);
+}
+.day-pill.active .day-pill-label { color: #00ff6a; font-size: 9px; }
+.day-pill.active .day-pill-num { color: #00ff6a; }
+.day-pill.rest {
+  border-color: rgba(255,149,0,0.45);
+  background: rgba(255,149,0,0.06);
+}
+.day-pill.rest .day-pill-num { color: #ff9500; }
+.day-pill.rest.active {
+  border-color: #ff9500;
+  box-shadow: 0 0 8px rgba(255,149,0,0.15);
+}
+
+/* Today's Training Tips Card - Green Border Style */
+.today-tips-card-new {
+  margin: 14px 16px 0;
+  padding: 13px 16px;
+  background: rgba(20,25,20,0.7);
+  border: 1px solid rgba(0,255,106,0.35);
+  border-radius: 12px;
+}
+.tips-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #00ff6a;
+  margin-bottom: 10px;
+}
+.tips-icon {
+  font-size: 16px;
+}
+.tips-body-text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #ccc;
+}
+
+/* Measurement hint */
+.measure-hint {
+  font-size: 11px;
+  color: #666;
+  font-weight: 400;
+  margin-left: 8px;
+  opacity: 0.85;
+}
+
+/* Mobile responsive for ring stats */
+@media (max-width: 360px) {
+  .ring-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .ring-stat-svg-wrap { width: 64px; height: 64px; }
+  .ring-stat-val { font-size: 15px; }
+  .ring-stat-label { font-size: 10px; }
+}
+
+</style>
+</head>
+<body>
+<div class="app-container" id="app">
+
+  <!-- ===== Header ===== -->
+  <div class="app-header">
+    <div class="header-brand">
+      <span class="header-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="#00ff6a"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+      <div>
+        <div class="app-title" id="headerTitle">怪兽训练计划</div>
+        <div class="app-subtitle-en">MONSTER FITNESS</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="header-btn" onclick="exportData()" title="导出数据">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Onboarding Page ===== -->
+  <div class="page active" id="page-onboarding">
+    <div class="onboarding-page">
+      <h1>⚡ 怪兽训练计划</h1>
+      <p>打造你的专属训练方案<br>选择器材，设定目标，开始变身</p>
+
+      <div class="onboarding-step">
+        <h3>01 选择训练器材</h3>
+        <div class="equip-grid" id="onboardingEquipGrid"></div>
+      </div>
+
+      <div class="onboarding-step">
+        <h3>02 设定训练目标</h3>
+        <div class="goal-options" id="onboardingGoalOptions"></div>
+      </div>
+
+      <div class="onboarding-step" id="onboardingBodyStep" style="display:none;">
+        <h3>03 身体数据（选填）</h3>
+        <div style="display:flex;gap:8px;">
+          <input type="number" id="onboardingHeight" placeholder="身高cm" style="flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:10px;color:#e0e0e0;font-size:14px;">
+          <input type="number" id="onboardingWeight" placeholder="体重kg" style="flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:10px;color:#e0e0e0;font-size:14px;">
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="completeOnboarding()">开始训练 →</button>
+    </div>
+  </div>
+
+  <!-- ===== Today Page ===== -->
+  <div class="page" id="page-today">
+    <div class="today-hero">
+      <div class="today-date" id="todayDate"></div>
+      <div class="today-greeting" id="todayGreeting"></div>
+      <div class="today-streak" id="todayStreak" style="display:none;"></div>
+      <div class="hero-slogan">今天也要全力以赴 · 等待见证蜕变</div>
+    </div>
+
+    <div class="quick-stats" id="todayQuickStats"></div>
+
+    <!-- Day 1-9 Cycle Navigation -->
+    <div class="day-cycle-nav-top" id="dayCycleNav"></div>
+
+    <div class="walk-checkin" id="walkCheckin">
+      <span class="walk-icon">🚶</span>
+      <div class="walk-info">
+        <div class="walk-name">今日步行 5km</div>
+        <div class="walk-desc">约消耗 300 卡路里</div>
+      </div>
+      <button class="walk-btn" id="walkBtn" onclick="toggleWalk()">打卡</button>
+    </div>
+
+    <div class="today-workout-card" id="todayWorkoutCard">
+      <div class="today-workout-header">
+        <div class="today-workout-title" id="todayWorkoutTitle">今日训练</div>
+        <div class="today-workout-tag" id="todayWorkoutTag">训练日</div>
+      </div>
+      
+      
+      <!-- Ring Progress -->
+      <div class="ring-progress-wrap" id="todayRingProgress">
+        <svg class="ring-svg" viewBox="0 0 160 160" style="width:160px;height:160px;">
+          <circle class="ring-bg" cx="80" cy="80" r="70"/>
+          <circle class="ring-fill" id="todayRingFill" cx="80" cy="80" r="70"
+            stroke-dasharray="440" stroke-dashoffset="440"/>
+        </svg>
+        <div class="ring-stats-below">
+          <div class="ring-pct-large" id="todayRingPct">0%</div>
+          <div class="ring-sub-text" id="todayRingSub">0/7 动作完成</div>
+        </div>
+      </div>
+
+      
+      <div class="today-exercise-list" id="todayExerciseList"></div>
+      <button class="start-workout-btn" id="startWorkoutBtn" onclick="startWorkout()">开始训练 ⚡</button>
+
+      <!-- Today's Training Tips - Below Start Button -->
+      <div class="today-tips-card-new" id="todayTipsCard" style="display:none;">
+        <div class="tips-title-row"><span class="tips-icon">💡</span><span>今日提示</span></div>
+        <div class="tips-body-text" id="todayTipsContent"></div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <div class="quick-action" onclick="switchPage('diet')">
+        <div class="quick-action-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ff6a" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div class="quick-action-label">记录饮食</div>
+      </div>
+      <div class="quick-action" onclick="switchPage('data')">
+        <div class="quick-action-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ff6a" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="quick-action-label">记录体重</div>
+      </div>
+      <div class="quick-action" onclick="switchPage('stats')">
+        <div class="quick-action-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ff6a" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="quick-action-label">查看统计</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Plan Page ===== -->
+  <div class="page" id="page-plan">
+    <div class="plan-header">
+      <div class="plan-title">📋 训练计划</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div class="plan-equip-badge plan-equip-badge-clickable" id="planEquipBadge" onclick="showEquipModal()" title="点击切换器材">拉力绳</div>
+        <div class="plan-cycle-badge" id="planCycleBadge">9日循环</div>
+        <div class="plan-goal-badge" id="planGoalBadge" onclick="showEquipModal()" title="点击切换训练目标">💪 增肌</div>
+      </div>
+    </div>
+    <div id="planGoalInfo" style="margin:0 16px 8px;font-size:11px;color:var(--text-secondary);text-align:center;"></div>
+    <div id="planDayList"></div>
+    <button class="plan-switch-btn" onclick="showEquipModal()">🔄 切换训练器材/方案</button>
+  </div>
+
+  <!-- ===== Workout Active Overlay ===== -->
+  <div class="workout-active-page" id="workoutActive">
+    <div class="workout-top-bar">
+      <button class="workout-back-btn" onclick="exitWorkout()">← 退出</button>
+      <div class="workout-progress-text" id="workoutProgressText">1 / 5</div>
+    </div>
+    <div class="workout-progress-bar"><div class="workout-progress-fill" id="workoutProgressFill"></div></div>
+    <div class="workout-exercise-active">
+      <div class="workout-exercise-name" id="activeExName"></div>
+      <div class="workout-exercise-sets-info" id="activeExSets"></div>
+      <div class="workout-timer" id="activeTimer">00:00</div>
+      <div class="workout-rest-timer" id="restTimerWrap" style="display:none;">
+        <div style="font-size:13px;color:#ff9500;margin-bottom:6px;">⏱ 组间休息</div>
+        <div style="font-size:36px;font-weight:700;color:#ff9500;" id="restTimerDisplay">60</div>
+        <button onclick="skipRestTimer()" style="margin-top:8px;padding:8px 20px;background:rgba(255,149,0,0.15);border:1px solid rgba(255,149,0,0.4);border-radius:20px;color:#ff9500;font-size:12px;cursor:pointer;">跳过</button>
+      </div>
+      <div class="workout-set-btns" id="activeSetBtns"></div>
+      <button class="workout-next-btn" id="activeNextBtn" onclick="nextExercise()">完成这组 ✓</button>
+    </div>
+    <div class="workout-complete-overlay" id="workoutComplete">
+      <div class="workout-complete-emoji">🎉</div>
+      <div class="workout-complete-title">训练完成！</div>
+      <div style="color:#888;margin-bottom:30px;" id="completeStats"></div>
+      <button class="workout-next-btn" onclick="exitWorkout()">返回首页</button>
+    </div>
+  </div>
+
+  <!-- ===== Diet Page ===== -->
+  <div class="page" id="page-diet">
+    <div class="diet-date-nav">
+      <button class="diet-date-btn" onclick="changeDietDate(-1)">‹</button>
+      <div class="diet-date-text" id="dietDateText"></div>
+      <button class="diet-date-btn" onclick="changeDietDate(1)">›</button>
+    </div>
+    <div class="diet-summary-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:14px;font-weight:600;">今日热量</div>
+        <div style="font-size:12px;color:var(--text-secondary);" id="dietCalText">0 / 0 卡路里</div>
+      </div>
+      <div class="diet-cal-bar"><div class="diet-cal-fill" id="dietCalFill"></div></div>
+      <div class="diet-cal-labels">
+        <span id="dietIntakeText">摄入: 0 卡路里</span>
+        <span id="dietBurnText">消耗: 0 卡路里</span>
+      </div>
+    </div>
+    <div id="dietMealList"></div>
+    <div style="padding:0 16px;margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:12px;color:var(--text-secondary);">添加到：</span>
+        <div id="quickMealSelector" style="display:flex;gap:4px;">
+          <button onclick="setQuickMeal('breakfast')" class="meal-select-btn" data-meal="breakfast" style="padding:4px 10px;font-size:11px;background:#222;border:1px solid #333;border-radius:12px;color:#888;cursor:pointer;">🌅 早餐</button>
+          <button onclick="setQuickMeal('lunch')" class="meal-select-btn" data-meal="lunch" style="padding:4px 10px;font-size:11px;background:#222;border:1px solid #333;border-radius:12px;color:#888;cursor:pointer;">☀️ 午餐</button>
+          <button onclick="setQuickMeal('dinner')" class="meal-select-btn" data-meal="dinner" style="padding:4px 10px;font-size:11px;background:#222;border:1px solid #333;border-radius:12px;color:#888;cursor:pointer;">🌙 晚餐</button>
+        </div>
+      </div>
+      <div class="quick-foods" id="quickFoodList"></div>
+    </div>
+  </div>
+
+  <!-- ===== Data Page ===== -->
+  <div class="page" id="page-data">
+    <div style="padding:16px 16px 8px;"><div style="font-size:17px;font-weight:700;">📊 身体数据</div></div>
+    <div class="data-section">
+      <div class="data-section-title">⚖️ 体重记录 <span class="measure-hint">建议：晨起空腹或运动后测量</span></div>
+      <div class="weight-input-row">
+        <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="今日体重 kg">
+        <button class="weight-input-btn" onclick="addWeight()">记录</button>
+      </div>
+      <div class="chart-container"><canvas class="chart-canvas" id="weightChart"></canvas></div>
+    </div>
+    <div class="data-section">
+      <div class="data-section-title" onclick="toggleMeasurements()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;">📏 围度记录（选填）<span class="measure-hint">每2-4周测一次即可</span><span id="measToggle" style="font-size:12px;color:var(--text-secondary);">▶</span></div>
+      <div id="measBody" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
+        <input type="number" step="0.1" class="weight-input" id="chestInput" placeholder="胸围 cm">
+        <input type="number" step="0.1" class="weight-input" id="armInput" placeholder="臂围 cm">
+        <input type="number" step="0.1" class="weight-input" id="waistInput" placeholder="腰围 cm">
+        <input type="number" step="0.1" class="weight-input" id="thighInput" placeholder="大腿围 cm">
+      </div>
+      <button class="weight-input-btn" onclick="addMeasurement()" style="width:100%;margin-bottom:12px;">记录围度</button>
+      <div class="chart-container"><canvas class="chart-canvas" id="measurementChart"></canvas></div>
+      </div>
+    </div>
+    <div class="data-section">
+      <div class="data-section-title">💧 饮水记录 <span class="measure-hint">每日目标 2500ml</span></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <div style="flex:1;background:var(--bg-card);border-radius:10px;padding:12px;border:1px solid #222;">
+          <div style="font-size:20px;font-weight:700;color:var(--text-green);" id="waterAmount">0</div>
+          <div style="font-size:11px;color:var(--text-secondary);">/ 2500 ml</div>
+        </div>
+        <button class="weight-input-btn" onclick="addWater(250)">+250ml</button>
+        <button class="weight-input-btn" onclick="addWater(500)">+500ml</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Stats Page ===== -->
+  <div class="page" id="page-stats">
+    <div style="padding:16px 16px 8px;"><div style="font-size:17px;font-weight:700;">📈 综合统计</div></div>
+    <!-- Ring Stats Row -->
+    <div class="ring-stats-row">
+      <!-- Streak Ring -->
+      <div class="ring-stat-card">
+        <div class="ring-stat-svg-wrap">
+          <svg class="ring-stat-svg" viewBox="0 0 100 100">
+            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
+            <circle class="ring-stat-fill" id="ringStreakFill" cx="50" cy="50" r="42"
+              stroke-dasharray="264" stroke-dashoffset="264" style="stroke:#00ff6a;"/>
+          </svg>
+          <div class="ring-stat-center"><div class="ring-stat-val" id="statsStreak">0</div></div>
+        </div>
+        <div class="ring-stat-label">连续打卡(天)</div>
+      </div>
+      <!-- Total Ring -->
+      <div class="ring-stat-card">
+        <div class="ring-stat-svg-wrap">
+          <svg class="ring-stat-svg" viewBox="0 0 100 100">
+            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
+            <circle class="ring-stat-fill" id="ringTotalFill" cx="50" cy="50" r="42"
+              stroke-dasharray="264" stroke-dashoffset="264" style="stroke:#00ccff;"/>
+          </svg>
+          <div class="ring-stat-center"><div class="ring-stat-val" id="statsTotal">0</div></div>
+        </div>
+        <div class="ring-stat-label">总训练次数</div>
+      </div>
+      <!-- Week Rate Ring -->
+      <div class="ring-stat-card">
+        <div class="ring-stat-svg-wrap">
+          <svg class="ring-stat-svg" viewBox="0 0 100 100">
+            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
+            <circle class="ring-stat-fill" id="ringWeekFill" cx="50" cy="50" r="42"
+              stroke-dasharray="264" stroke-dashoffset="264" style="stroke:#ff9500;"/>
+          </svg>
+          <div class="ring-stat-center"><div class="ring-stat-val" id="statsWeekRateSmall">0%</div></div>
+        </div>
+        <div class="ring-stat-label">本周完成率</div>
+      </div>
+      <!-- Weight Change Ring -->
+      <div class="ring-stat-card">
+        <div class="ring-stat-svg-wrap">
+          <svg class="ring-stat-svg" viewBox="0 0 100 100">
+            <circle class="ring-stat-bg" cx="50" cy="50" r="42"/>
+            <circle class="ring-stat-fill" id="ringWeightFill" cx="50" cy="50" r="42"
+              stroke-dasharray="264" stroke-dashoffset="132" style="stroke:#a855f7;"/>
+          </svg>
+          <div class="ring-stat-center"><div class="ring-stat-val" id="statsWeightChange">--</div></div>
+        </div>
+        <div class="ring-stat-label">体重变化(kg)</div>
+      </div>
+    </div>
+    <div class="stats-card">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px;">📅 本周训练打卡</div>
+      <div id="statsWeekGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"></div>
+    </div>
+    <div class="stats-card">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px;">📊 热量趋势（近7天）</div>
+      <div class="chart-container"><canvas class="chart-canvas" id="calChart" style="height:180px;"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ===== Settings Page ===== -->
+  <div class="page" id="page-settings">
+    <div style="padding:16px 16px 8px;"><div style="font-size:17px;font-weight:700;">⚙️ 设置</div></div>
+    <div class="settings-group">
+      <div class="settings-group-title">个人信息</div>
+      <div class="settings-item">
+        <div class="settings-item-label">出生年份</div>
+        <input type="number" class="settings-item-input" id="settingBirthYear" placeholder="1987">
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-label">身高 (cm)</div>
+        <input type="number" class="settings-item-input" id="settingHeight" placeholder="170">
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-label">当前体重 (kg)</div>
+        <input type="number" step="0.1" class="settings-item-input" id="settingWeight" placeholder="65">
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-label">目标体重 (kg)</div>
+        <input type="number" step="0.1" class="settings-item-input" id="settingGoalWeight" placeholder="75">
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-label">性别</div>
+        <div style="display:flex;gap:8px;">
+          <button class="settings-btn" style="flex:1;border:1px solid #333;color:var(--text-secondary);" onclick="setGender('male')" id="genderMale">♂ 男</button>
+          <button class="settings-btn" style="flex:1;border:1px solid #333;color:var(--text-secondary);" onclick="setGender('female')" id="genderFemale">♀ 女</button>
+        </div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title">训练设置</div>
+      <div class="settings-item">
+        <div class="settings-item-label">当前器材</div>
+        <div class="settings-item-value" id="settingEquip">拉力绳</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-item-label">训练目标</div>
+        <div class="settings-item-value" id="settingGoal">增肌</div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title">数据管理</div>
+      <button class="settings-btn btn-export" onclick="exportData()">📤 导出数据备份</button>
+      <button class="settings-btn btn-reset" onclick="resetData()">🗑️ 重置所有数据</button>
+    </div>
+    <div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:11px;">
+      ⚡ 怪兽训练计划 v3.0<br>
+      数据保存在本地浏览器
+    </div>
+  </div>
+
+  <!-- ===== Equip Switch Modal ===== -->
+  <div class="modal-overlay" id="equipModal">
+    <div class="modal-content">
+      <div class="modal-title">切换训练器材</div>
+      <div class="modal-equip-grid" id="modalEquipGrid"></div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">训练目标</div>
+        <div style="display:flex;gap:8px;">
+          <button class="modal-goal-btn" onclick="selectModalGoal('muscle')" id="modalGoalMuscle" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">💪 增肌</button>
+          <button class="modal-goal-btn" onclick="selectModalGoal('strength')" id="modalGoalStrength" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">🔥 力量</button>
+          <button class="modal-goal-btn" onclick="selectModalGoal('weight_loss')" id="modalGoalWeightLoss" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">🏃 减脂</button>
+          <button class="modal-goal-btn" onclick="selectModalGoal('endurance')" id="modalGoalEndurance" style="flex:1;padding:8px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#e0e0e0;font-size:12px;cursor:pointer;">❤️ 耐力</button>
+        </div>
+      </div>
+      <button class="modal-btn" onclick="applyEquipSwitch()">生成新方案 →</button>
+      <button style="background:none;border:none;color:#888;margin-top:12px;font-size:13px;cursor:pointer;width:100%;" onclick="hideEquipModal()">取消</button>
+    </div>
+  </div>
+
+  <!-- ===== Bottom Nav ===== -->
+  <div class="bottom-nav" id="bottomNav">
+    <div class="nav-item active" onclick="switchPage('today')" data-page="today">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="nav-label">打卡</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('plan')" data-page="plan">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="nav-label">计划</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('diet')" data-page="diet">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <div class="nav-label">饮食</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('data')" data-page="data">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="nav-label">数据</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('stats')" data-page="stats">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="nav-label">统计</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>// ===================================================================
+// 怪兽训练计划 v3 - 可扩展训练系统
+// ===================================================================
+
+// ===== Equipment & Goal Config =====
+var EQUIPMENT = {
+  band:      { id:'band',      name:'拉力绳',   icon:'🎯', desc:'居家拉力绳训练' },
+  dumbbell:  { id:'dumbbell',  name:'哑铃',     icon:'🏋',  desc:'哑铃力量训练' },
+  barbell:   { id:'barbell',   name:'杠铃',     icon:'🏋',  desc:'杠铃复合训练' },
+  bodyweight:{ id:'bodyweight',name:'徒手',     icon:'💪', desc:'自重训练' },
+  kettlebell:{ id:'kettlebell',name:'壶铃',     icon:'🔔', desc:'壶铃爆发力训练' },
+  mixed:     { id:'mixed',     name:'综合器材', icon:'⚡', desc:'多器材组合训练' },
+};
+
+var GOALS = {
+  muscle:      { id:'muscle',      name:'增肌',   icon:'💪', desc:'增加肌肉量，雕塑体型' },
+  strength:    { id:'strength',    name:'力量',   icon:'🔥', desc:'提升最大力量' },
+  weight_loss: { id:'weight_loss', name:'减脂',   icon:'🏃', desc:'燃烧脂肪，塑形减脂' },
+  endurance:   { id:'endurance',   name:'耐力',   icon:'❤️', desc:'提升心肺耐力' },
+};
+
+// ===== Exercise Database (Extensible) =====
+var EXERCISE_DB = [
+  // ========== 拉力绳 (band) - 完整版 ==========
+  // 胸部
+  { name:'拉力绳胸推',        equip:['band','mixed'],     muscle:'chest',    difficulty:1, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳飞鸟',        equip:['band','mixed'],     muscle:'chest',    difficulty:1, sets:3, reps:'15-20', rest:45 },
+  { name:'拉力绳上斜胸推',    equip:['band','mixed'],     muscle:'chest',    difficulty:2, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳夹胸',        equip:['band','mixed'],     muscle:'chest',    difficulty:1, sets:3, reps:'15-18', rest:45 },
+  // 背部
+  { name:'拉力绳高位下拉',    equip:['band','mixed'],     muscle:'back',     difficulty:2, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳坐姿划船',    equip:['band','mixed'],     muscle:'back',     difficulty:1, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳直臂下压',    equip:['band','mixed'],     muscle:'back',     difficulty:1, sets:3, reps:'15-20', rest:45 },
+  { name:'拉力绳单臂划船',    equip:['band','mixed'],     muscle:'back',     difficulty:2, sets:3, reps:'12-15/臂', rest:60 },
+  // 肩部
+  { name:'拉力绳肩推',        equip:['band','mixed'],     muscle:'shoulder', difficulty:1, sets:4, reps:'12-15', rest:60 },
+  { name:'拉力绳侧平举',      equip:['band','mixed'],     muscle:'shoulder', difficulty:1, sets:3, reps:'15-20', rest:45 },
+  { name:'拉力绳面拉',        equip:['band','mixed'],     muscle:'shoulder', difficulty:2, sets:3, reps:'15-20', rest:60 },
+  { name:'拉力绳前平举',      equip:['band','mixed'],     muscle:'shoulder', difficulty:1, sets:3, reps:'15-18', rest:45 },
+  { name:'拉力绳俯身飞鸟',    equip:['band','mixed'],     muscle:'shoulder', difficulty:2, sets:3, reps:'12-15', rest:45 },
+  // 手臂 - 二头
+  { name:'拉力绳二头弯举',    equip:['band','mixed'],     muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'拉力绳锤式弯举',    equip:['band','mixed'],     muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
+  // 手臂 - 三头
+  { name:'拉力绳三头下压',    equip:['band','mixed'],     muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'拉力绳三头后展',    equip:['band','mixed'],     muscle:'arm',      difficulty:2, sets:3, reps:'12-15', rest:45 },
+  // 腿部
+  { name:'拉力绳深蹲',        equip:['band','mixed'],     muscle:'legs',     difficulty:2, sets:4, reps:'15-20', rest:60 },
+  { name:'拉力绳箭步蹲',      equip:['band','mixed'],     muscle:'legs',     difficulty:2, sets:3, reps:'12/腿', rest:60 },
+  { name:'拉力绳腿弯举',      equip:['band','mixed'],     muscle:'legs',     difficulty:2, sets:3, reps:'15-20', rest:60 },
+  { name:'拉力绳臀桥',        equip:['band','mixed'],     muscle:'glute',    difficulty:1, sets:4, reps:'15-20', rest:60 },
+  { name:'拉力绳踢臀',        equip:['band','mixed'],     muscle:'glute',    difficulty:2, sets:3, reps:'15/侧', rest:45 },
+  // 核心
+  { name:'拉力绳卷腹',        equip:['band','mixed'],     muscle:'core',     difficulty:1, sets:3, reps:'15-20', rest:30 },
+  { name:'拉力绳伐木劈',      equip:['band','mixed'],     muscle:'core',     difficulty:2, sets:3, reps:'12/侧', rest:45 },
+
+  // ========== 哑铃 (dumbbell) - 完整版 ==========
+  // 胸部
+  { name:'哑铃平卧推',        equip:['dumbbell','mixed'], muscle:'chest',    difficulty:2, sets:4, reps:'8-12', rest:60 },
+  { name:'哑铃上斜推',        equip:['dumbbell','mixed'], muscle:'chest',    difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃下斜推',        equip:['dumbbell','mixed'], muscle:'chest',    difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃飞鸟',          equip:['dumbbell','mixed'], muscle:'chest',    difficulty:1, sets:3, reps:'12-15', rest:45 },
+  // 背部
+  { name:'哑铃单臂划船',      equip:['dumbbell','mixed'], muscle:'back',     difficulty:2, sets:4, reps:'10-12/臂', rest:60 },
+  { name:'哑铃硬拉',          equip:['dumbbell','mixed'], muscle:'back',     difficulty:2, sets:4, reps:'8-12', rest:60 },
+  { name:'哑铃俯身划船',      equip:['dumbbell','mixed'], muscle:'back',     difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃耸肩',          equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:1, sets:3, reps:'12-15', rest:45 },
+  // 肩部
+  { name:'哑铃肩推',          equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃侧平举',        equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'哑铃前平举',        equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:1, sets:3, reps:'12-15', rest:45 },
+  { name:'哑铃俯身飞鸟',      equip:['dumbbell','mixed'], muscle:'shoulder', difficulty:2, sets:3, reps:'10-12', rest:45 },
+  // 手臂 - 二头
+  { name:'哑铃站姿弯举',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:1, sets:3, reps:'10-12', rest:45 },
+  { name:'哑铃锤式弯举',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:1, sets:3, reps:'10-12', rest:45 },
+  { name:'哑铃集中弯举',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:1, sets:3, reps:'12-15', rest:45 },
+  // 手臂 - 三头
+  { name:'哑铃三头屈伸',      equip:['dumbbell','mixed'], muscle:'arm',      difficulty:2, sets:3, reps:'10-12', rest:45 },
+  { name:'哑铃三头颈后臂屈伸',equip:['dumbbell','mixed'], muscle:'arm',      difficulty:2, sets:3, reps:'10-12', rest:45 },
+  // 腿部
+  { name:'哑铃深蹲',          equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:4, reps:'10-15', rest:60 },
+  { name:'哑铃罗马尼亚硬拉',  equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'哑铃箭步蹲',        equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:3, reps:'10/腿', rest:60 },
+  { name:'哑铃腿弯举',        equip:['dumbbell','mixed'], muscle:'legs',     difficulty:2, sets:3, reps:'12-15', rest:45 },
+  { name:'哑铃臀桥',          equip:['dumbbell','mixed'], muscle:'glute',    difficulty:1, sets:4, reps:'12-15', rest:60 },
+  // 核心
+  { name:'哑铃俄罗斯转体',    equip:['dumbbell','mixed'], muscle:'core',     difficulty:2, sets:3, reps:'20', rest:45 },
+  { name:'哑铃侧屈',          equip:['dumbbell','mixed'], muscle:'core',     difficulty:1, sets:3, reps:'15/侧', rest:45 },
+
+  // ========== 杠铃 (barbell) - 完整版 ==========
+  { name:'杠铃平卧推',        equip:['barbell','mixed'],  muscle:'chest',    difficulty:3, sets:5, reps:'5-8', rest:90 },
+  { name:'杠铃上斜卧推',      equip:['barbell','mixed'],  muscle:'chest',    difficulty:3, sets:4, reps:'6-10', rest:90 },
+  { name:'杠铃深蹲',          equip:['barbell','mixed'],  muscle:'legs',     difficulty:3, sets:5, reps:'5-8', rest:120 },
+  { name:'杠铃硬拉',          equip:['barbell','mixed'],  muscle:'back',     difficulty:3, sets:5, reps:'5-8', rest:120 },
+  { name:'杠铃划船',          equip:['barbell','mixed'],  muscle:'back',     difficulty:3, sets:4, reps:'6-10', rest:90 },
+  { name:'杠铃肩推',          equip:['barbell','mixed'],  muscle:'shoulder', difficulty:3, sets:4, reps:'6-10', rest:90 },
+  { name:'杠铃箭步蹲',        equip:['barbell','mixed'],  muscle:'legs',     difficulty:3, sets:4, reps:'8/腿', rest:90 },
+  { name:'杠铃臀冲',          equip:['barbell','mixed'],  muscle:'glute',    difficulty:3, sets:4, reps:'8-10', rest:90 },
+  { name:'杠铃二头弯举',      equip:['barbell','mixed'],  muscle:'arm',      difficulty:2, sets:3, reps:'8-12', rest:60 },
+  { name:'杠铃三头臂屈伸',    equip:['barbell','mixed'],  muscle:'arm',      difficulty:2, sets:3, reps:'8-12', rest:60 },
+
+  // ========== 徒手 (bodyweight) - 完整版 ==========
+  // 胸部
+  { name:'标准俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:1, sets:4, reps:'12-20', rest:45 },
+  { name:'宽距俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:1, sets:3, reps:'10-15', rest:45 },
+  { name:'钻石俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:2, sets:3, reps:'8-12', rest:45 },
+  { name:'上斜俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:1, sets:3, reps:'12-18', rest:45 },
+  { name:'下斜俯卧撑',        equip:['bodyweight','mixed'], muscle:'chest',  difficulty:2, sets:3, reps:'8-12', rest:45 },
+  // 背部
+  { name:'引体向上',          equip:['bodyweight','mixed'], muscle:'back',   difficulty:3, sets:4, reps:'5-10', rest:60 },
+  { name:'反手引体向上',      equip:['bodyweight','mixed'], muscle:'arm',    difficulty:3, sets:3, reps:'5-8', rest:60 },
+  { name:'澳式引体向上',      equip:['bodyweight','mixed'], muscle:'back',   difficulty:2, sets:3, reps:'8-12', rest:60 },
+  // 肩部
+  { name:'倒立俯卧撑(进阶)', equip:['bodyweight','mixed'], muscle:'shoulder',difficulty:3, sets:3, reps:'5-8', rest:60 },
+  { name:'折刀俯卧撑',        equip:['bodyweight','mixed'], muscle:'shoulder',difficulty:2, sets:3, reps:'8-12', rest:45 },
+  { name:'Y字伸展',          equip:['bodyweight','mixed'], muscle:'shoulder',difficulty:1, sets:3, reps:'12-15', rest:30 },
+  // 手臂 - 三头
+  { name:'椅子臂屈伸',        equip:['bodyweight','mixed'], muscle:'arm',    difficulty:1, sets:3, reps:'10-15', rest:45 },
+  { name:'窄距俯卧撑',        equip:['bodyweight','mixed'], muscle:'arm',    difficulty:2, sets:3, reps:'8-12', rest:45 },
+  // 腿部
+  { name:'徒手深蹲',          equip:['bodyweight','mixed'], muscle:'legs',   difficulty:1, sets:4, reps:'20-30', rest:45 },
+  { name:'徒手箭步蹲',        equip:['bodyweight','mixed'], muscle:'legs',   difficulty:2, sets:3, reps:'12/腿', rest:60 },
+  { name:'保加利亚分腿蹲',    equip:['bodyweight','mixed'], muscle:'legs',   difficulty:3, sets:3, reps:'8-10/腿', rest:60 },
+  { name:'臀桥',              equip:['bodyweight','mixed'], muscle:'glute',  difficulty:1, sets:4, reps:'15-20', rest:45 },
+  { name:'单腿硬拉',          equip:['bodyweight','mixed'], muscle:'glute',  difficulty:2, sets:3, reps:'10/腿', rest:60 },
+  // 核心
+  { name:'平板支撑',          equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'30-60秒', rest:45 },
+  { name:'卷腹',              equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:4, reps:'15-20', rest:30 },
+  { name:'登山跑',            equip:['bodyweight','mixed'], muscle:'core',   difficulty:2, sets:3, reps:'30秒', rest:30 },
+  { name:'俄罗斯转体',        equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'20', rest:45 },
+  { name:'死虫式',            equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'12/侧', rest:45 },
+  { name:'仰卧举腿',          equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'15', rest:45 },
+  { name:'反向卷腹',          equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'15-20', rest:30 },
+  { name:'侧平板支撑',        equip:['bodyweight','mixed'], muscle:'core',   difficulty:1, sets:3, reps:'30秒/侧', rest:30 },
+  { name:'V字支撑',           equip:['bodyweight','mixed'], muscle:'core',   difficulty:2, sets:3, reps:'20-30秒', rest:30 },
+
+  // ========== 壶铃 (kettlebell) - 完整版 ==========
+  { name:'壶铃摇摆',          equip:['kettlebell','mixed'], muscle:'legs',   difficulty:2, sets:4, reps:'15-20', rest:60 },
+  { name:'壶铃高脚杯深蹲',    equip:['kettlebell','mixed'], muscle:'legs',   difficulty:2, sets:4, reps:'10-12', rest:60 },
+  { name:'壶铃单臂划船',      equip:['kettlebell','mixed'], muscle:'back',   difficulty:2, sets:3, reps:'10-12/臂', rest:60 },
+  { name:'壶铃肩推',          equip:['kettlebell','mixed'], muscle:'shoulder',difficulty:2, sets:3, reps:'8-12', rest:60 },
+  { name:'壶铃硬拉',          equip:['kettlebell','mixed'], muscle:'legs',   difficulty:2, sets:4, reps:'8-10', rest:60 },
+  { name:'壶铃土耳其起立',    equip:['kettlebell','mixed'], muscle:'core',   difficulty:3, sets:3, reps:'5/侧', rest:90 },
+  { name:'壶铃双臂摆举',      equip:['kettlebell','mixed'], muscle:'glute',  difficulty:2, sets:4, reps:'12-15', rest:60 },
+  { name:'壶铃高翻',          equip:['kettlebell','mixed'], muscle:'back',   difficulty:3, sets:3, reps:'8-10', rest:60 },
+  { name:'壶铃二头弯举',      equip:['kettlebell','mixed'], muscle:'arm',    difficulty:1, sets:3, reps:'10-12', rest:45 },
+  { name:'壶铃三头屈伸',      equip:['kettlebell','mixed'], muscle:'arm',    difficulty:2, sets:3, reps:'10-12', rest:45 },
+];
+
+// ===== Plan Generator =====
+// ===== 9-Day Fixed Cycle Template =====
+var NINE_DAY_TEMPLATE = [
+  { name: '胸 + 三头',  muscles: ['chest','arm_tricep'], isRest: false },
+  { name: '背 + 二头',  muscles: ['back','arm_bicep'],  isRest: false },
+  { name: '肩 + 腹',    muscles: ['shoulder','core'],  isRest: false },
+  { name: '休息日',     muscles: [],                   isRest: true  },
+  { name: '胸 + 三头',  muscles: ['chest','arm_tricep'], isRest: false }, // 重复Day1
+  { name: '背 + 二头',  muscles: ['back','arm_bicep'],  isRest: false }, // 重复Day2
+  { name: '肩 + 腹',    muscles: ['shoulder','core'],  isRest: false }, // 重复Day3
+  { name: '腿 + 臀',    muscles: ['legs','glute'],      isRest: false },
+  { name: '休息日',     muscles: [],                   isRest: true  },
+];
+
+// Training Tips Database - Professional tips for each muscle group
+var TRAINING_TIPS = {
+  '胸': {
+    tips: [
+      '推类动作时，肩胛骨要后收下沉，避免耸肩',
+      '下放时要感受胸部拉伸，不要完全锁死手肘',
+      '推起时想象双手向中间挤压，激活更多胸肌纤维',
+      '呼吸节奏：发力时呼气，还原时吸气'
+    ],
+    warning: '⚠️ 胸部训练后注意三角肌前束的恢复'
+  },
+  '背': {
+    tips: [
+      '拉类动作时先启动背阔肌，不要靠手臂借力',
+      '保持背部挺直，核心收紧保护腰椎',
+      '下拉/划船时肩胛骨要主动收缩',
+      '想象用肘部去拉，而不是用手'
+    ],
+    warning: '⚠️ 背部训练后可做猫牛式放松脊柱'
+  },
+  '肩': {
+    tips: [
+      '侧平举时小拇指略高于大拇指（内旋）更好刺激中束',
+      '肩推时避免过度后仰，防止腰部代偿',
+      '肩部训练重量不宜过大，注重动作控制',
+      '每组最后2-3次做顶峰收缩停留1-2秒'
+    ],
+    warning: '⚠️ 肩部有伤史者避免颈后推举'
+  },
+  '腹': {
+    tips: [
+      '卷腹时下巴微收，视线看向膝盖方向',
+      '不要用脖子发力，双手轻扶耳侧即可',
+      '全程保持核心紧绷，不要塌腰',
+      '慢起慢落比快做更有效果'
+    ],
+    warning: '⚠️ 腰部不适者避免仰卧抬腿类动作'
+  },
+  '腿+臀': {
+    tips: [
+      '深蹲时膝盖方向与脚尖一致，不要内扣或外翻',
+      '蹲至大腿平行地面即可，不必追求全蹲',
+      '臀部训练要有意识地挤压臀部肌肉',
+      '腿部训练后做静态拉伸帮助恢复'
+    ],
+    warning: '⚠️ 膝盖不适者减小深蹲幅度，选择箱式深蹲'
+  },
+  '休息日': {
+    tips: [
+      '休息日也要活动身体，散步15-30分钟促进血液循环',
+      '可以做一些轻度拉伸或泡沫轴放松',
+      '保证充足睡眠7-8小时，肌肉在睡眠中生长',
+      '补充足够蛋白质和水分'
+    ],
+    warning: '💤 好好休息是为了更好的训练！'
+  }
+};
+
+// Muscle group mapping for exercise selection
+var MUSCLE_MAP = {
+  chest:       ['chest'],
+  back:        ['back'],
+  shoulder:    ['shoulder'],
+  core:        ['core'],
+  legs:        ['legs'],
+  glute:       ['legs', 'glute'],
+  arm_bicep:   ['arm'],
+  arm_tricep:  ['arm'],
+};
+
+// Exercises per muscle group (how many to pick)
+var MUSCLE_EX_COUNT = {
+  chest: 3, back: 3, shoulder: 2, core: 3, legs: 3, glute: 2,
+  arm_bicep: 2, arm_tricep: 2,
+};
+
+// Plan Generator - Fixed 9-day cycle, goal-aware
+function generatePlan(equipId, goalId) {
+  if (!EQUIPMENT[equipId]) return [];
+  var allExercises = EXERCISE_DB.filter(function(e) { return e.equip.indexOf(equipId) >= 0; });
+  if (allExercises.length === 0) return [];
+
+  // Goal-specific programming — different goals = different exercises + params
+  var goalConfig = {
+    muscle:      { setBonus:0,  repMod:1.0, restMod:1.0, intensity:'balanced',  info:'标准增肌 · 8-15次/组' },
+    strength:    { setBonus:1,  repMod:0.6, restMod:1.5, intensity:'high',      info:'大重量力量 · 5-8次/组 · 长休息' },
+    weight_loss: { setBonus:0,  repMod:1.4, restMod:0.6, intensity:'metabolic', info:'燃脂模式 · 15-25次/组 · 短休息' },
+    endurance:   { setBonus:-1, repMod:1.5, restMod:0.7, intensity:'endurance', info:'耐力模式 · 15-25次/组 · 中等休息' },
+  };
+  var cfg = goalConfig[goalId] || goalConfig['muscle'];
+
+  // Step 1: Filter/Difficulty-preference by goal
+  var avail;
+  if (cfg.intensity === 'high') {
+    avail = allExercises.filter(function(e) { return e.difficulty >= 2; });
+    if (avail.length < 8) avail = allExercises.slice();
+  } else {
+    avail = allExercises.slice();
+  }
+
+  // Step 2: Rep helpers
+  function parseR(s) {
+    var m = String(s).match(/(\d+)-(\d+)/);
+    if (m) return { min: parseInt(m[1]), max: parseInt(m[2]) };
+    var n = parseInt(s); if (!isNaN(n)) return { min: n, max: n };
+    return { min: 10, max: 12 };
+  }
+  function scaleR(s, mod) {
+    var r = parseR(s); var mn = Math.round(r.min * mod), mx = Math.round(r.max * mod);
+    if (mn < 5) mn = 5; if (mx < mn + 2) mx = mn + Math.max(2, Math.round(mn * 0.3));
+    return mn === mx ? String(mn) : mn + '-' + mx;
+  }
+
+  // Step 3: Build 9-day plan with variety
+  var plan = [];
+  var globalUsed = {};
+
+  for (var d = 0; d < NINE_DAY_TEMPLATE.length; d++) {
+    var tpl = NINE_DAY_TEMPLATE[d];
+    if (tpl.isRest) {
+      plan.push({ name: tpl.name, exercises: [], isRest: true, dayNum: d + 1, goal: goalId });
+      continue;
+    }
+    var dayExs = [];
+    var dayUsed = {};
+    for (var m = 0; m < tpl.muscles.length; m++) {
+      var mk = tpl.muscles[m];
+      var tgtM = MUSCLE_MAP[mk] || [mk];
+      var exCnt = MUSCLE_EX_COUNT[mk] || 2;
+      var candidates = avail.filter(function(e) {
+        return tgtM.indexOf(e.muscle) >= 0 && !dayUsed[e.name];
+      });
+      // Fallback: if strength filter removed too many, use full pool for this muscle
+      if (candidates.length < exCnt) {
+        candidates = allExercises.filter(function(e) {
+          return tgtM.indexOf(e.muscle) >= 0 && !dayUsed[e.name];
+        });
+      }
+      // Sort: prefer globally-unused exercises first, then by intensity
+      // Non-strength: light shuffle for variety between goals
+      if (cfg.intensity !== 'high') {
+        for (var si = candidates.length - 1; si > 0; si--) {
+          var sj = Math.floor(Math.random() * (si + 1));
+          var tmp = candidates[si]; candidates[si] = candidates[sj]; candidates[sj] = tmp;
+        }
+      }
+      candidates.sort(function(a, b) {
+        var aUsed = globalUsed[a.name] ? 100 : 0;
+        var bUsed = globalUsed[b.name] ? 100 : 0;
+        if (cfg.intensity === 'high')
+          return (aUsed || -a.difficulty * 20) - (bUsed || -b.difficulty * 20);
+        return (aUsed || a.difficulty) - (bUsed || b.difficulty);
+      });
+      for (var c = 0; c < Math.min(exCnt, candidates.length); c++) {
+        var sel = candidates[c];
+        dayUsed[sel.name] = true;
+        globalUsed[sel.name] = (globalUsed[sel.name] || 0) + 1;
+        var adjSets = sel.sets + cfg.setBonus; if (adjSets < 2) adjSets = 2;
+        var adjRest = Math.round(sel.rest * cfg.restMod); if (adjRest < 15) adjRest = 15;
+        dayExs.push({
+          name: sel.name, sets: adjSets, reps: scaleR(sel.reps, cfg.repMod),
+          rest: adjRest, muscle: sel.muscle, difficulty: sel.difficulty
+        });
+      }
+    }
+    plan.push({
+      name: tpl.name, exercises: dayExs, isRest: false,
+      dayNum: d + 1, goal: goalId, goalInfo: cfg.info
+    });
+  }
+  return plan;
+}
+
+// ===== State =====
+var state = {
+  onboardingDone: false,
+  equipment: 'band',
+  goal: 'muscle',
+  plan: [],
+  planStartDate: null,
+  weights: [],
+  measurements: [],
+  waterIntake: 0,
+  dietMeals: {},
+  trainingLog: {},
+  settings: { birthYear: 1987, height: 170, weight: 65, goalWeight: 75, gender: 'male' },
+};
+
+// ===== Utility =====
+function todayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function showToast(msg, showAction, actionCallback) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  if (showAction && actionCallback) {
+    t.style.cursor = 'pointer';
+    t.onclick = function() { t.classList.remove('show'); actionCallback(); };
+  } else {
+    t.style.cursor = '';
+    t.onclick = null;
+  }
+  setTimeout(function() { t.classList.remove('show'); t.onclick = null; }, showAction ? 5000 : 2000);
+}
+
+function saveState() {
+  try { localStorage.setItem('monsterPlanState', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    var s = localStorage.getItem('monsterPlanState');
+    if (s) {
+      var parsed = JSON.parse(s);
+      for (var key in parsed) {
+        if (key === 'settings' && parsed.settings) {
+          for (var sk in parsed.settings) {
+            state.settings[sk] = parsed.settings[sk];
+          }
+        } else {
+          state[key] = parsed[key];
+        }
+      }
+    }
+  } catch(e) {}
+}
+
+// ===== Onboarding =====
+var onboardingSelections = { equip: 'band', goal: 'muscle', freq: 4 };
+
+function initOnboarding() {
+  var equipGrid = document.getElementById('onboardingEquipGrid');
+  if (!equipGrid) return;
+  equipGrid.innerHTML = '';
+  var keys = ['band','dumbbell','barbell','bodyweight','kettlebell','mixed'];
+  for (var i = 0; i < keys.length; i++) {
+    var eq = EQUIPMENT[keys[i]];
+    if (!eq) continue;
+    var card = document.createElement('div');
+    card.className = 'equip-card' + (onboardingSelections.equip === eq.id ? ' selected' : '');
+    card.innerHTML = '<div class="equip-icon">' + eq.icon + '</div><div class="equip-name">' + eq.name + '</div>';
+    (function(eqId) {
+      card.onclick = function() { onboardingSelections.equip = eqId; initOnboarding(); };
+    })(eq.id);
+    equipGrid.appendChild(card);
+  }
+
+  var goalOpt = document.getElementById('onboardingGoalOptions');
+  if (goalOpt) {
+    goalOpt.innerHTML = '';
+    var gKeys = ['muscle','strength','weight_loss','endurance'];
+    for (var i = 0; i < gKeys.length; i++) {
+      var g = GOALS[gKeys[i]];
+      if (!g) continue;
+      var card = document.createElement('div');
+      card.className = 'goal-card' + (onboardingSelections.goal === g.id ? ' selected' : '');
+      card.innerHTML = '<div class="goal-icon">' + g.icon + '</div><div class="goal-text"><h4>' + g.name + '</h4><p>' + g.desc + '</p></div>';
+      (function(gId) {
+        card.onclick = function() { onboardingSelections.goal = gId; initOnboarding(); };
+      })(g.id);
+      goalOpt.appendChild(card);
+    }
+  }
+}
+
+function completeOnboarding() {
+  state.equipment = onboardingSelections.equip;
+  state.goal = onboardingSelections.goal;
+  state.plan = generatePlan(state.equipment, state.goal);
+  state.planStartDate = todayStr();
+  state.onboardingDone = true;
+  var h = document.getElementById('onboardingHeight').value;
+  var w = document.getElementById('onboardingWeight').value;
+  if (h) state.settings.height = parseInt(h) || 170;
+  if (w) state.settings.weight = parseFloat(w) || 65;
+  saveState();
+  initApp();
+}
+
+// ===== Init App =====
+function initApp() {
+  loadState();
+  if (!state.onboardingDone) {
+    showPage('onboarding');
+    initOnboarding();
+    return;
+  }
+  if (!state.plan || state.plan.length === 0) {
+    state.plan = generatePlan(state.equipment, state.goal);
+    saveState();
+  }
+  // Auto-migrate: if old plan length != 9, regenerate with new 9-day cycle
+  if (state.plan && state.plan.length !== NINE_DAY_TEMPLATE.length) {
+    var oldStartDate = state.planStartDate;
+    state.plan = generatePlan(state.equipment, state.goal);
+    if (oldStartDate) state.planStartDate = oldStartDate;
+    saveState();
+  }
+  renderToday();
+  renderPlan();
+  renderDiet();
+  renderData();
+  renderStats();
+  renderSettings();
+  showPage('today');
+}
+
+// ===== Page Navigation =====
+function showPage(pageId) {
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
+  var target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+  var navItems = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < navItems.length; i++) {
+    navItems[i].classList.toggle('active', navItems[i].getAttribute('data-page') === pageId);
+  }
+  if (pageId === 'today') renderToday();
+  if (pageId === 'plan') renderPlan();
+  if (pageId === 'diet') renderDiet();
+  if (pageId === 'stats') renderStats();
+  if (pageId === 'data') renderData();
+  if (pageId === 'settings') renderSettings();
+}
+
+function switchPage(pageId) { showPage(pageId); }
+
+// ===== Today Page =====
+function getTodayPlanDay() {
+  if (!state.planStartDate || !state.plan || state.plan.length === 0) return 0;
+  var start = new Date(state.planStartDate);
+  var now = new Date();
+  var diffDays = Math.floor((now - start) / (1000*60*60*24));
+  // Fixed 9-day cycle
+  return Math.max(0, diffDays) % 9;
+}
+
+function renderToday() {
+  var now = new Date();
+  var weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  var wd = weekdays[now.getDay()];
+  var dateStr = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 ' + wd;
+  var el = document.getElementById('todayDate');
+  if (el) el.textContent = dateStr;
+  var hour = now.getHours();
+  var greeting = '晚上好';
+  if (hour < 6) greeting = '夜深了';
+  else if (hour < 12) greeting = '早上好';
+  else if (hour < 14) greeting = '中午好';
+  else if (hour < 18) greeting = '下午好';
+  var gEl = document.getElementById('todayGreeting');
+  if (gEl) gEl.innerHTML = greeting + '，<span>毅</span>';
+  var streak = getStreak();
+  var streakEl = document.getElementById('todayStreak');
+  if (streakEl) {
+    if (streak > 0) {
+      streakEl.style.display = 'inline-flex';
+      streakEl.innerHTML = '🔥 连续打卡 ' + streak + ' 天';
+    } else {
+      streakEl.style.display = 'none';
+    }
+  }
+  var weekComplete = getWeekCompletedCount();
+  var totalComplete = getTotalCompleted();
+  var qsEl = document.getElementById('todayQuickStats');
+  if (qsEl) {
+    qsEl.innerHTML = '<div class="quick-stat"><div class="quick-stat-value">' + weekComplete + '</div><div class="quick-stat-label">本周打卡</div></div>'
+      + '<div class="quick-stat"><div class="quick-stat-value">' + totalComplete + '</div><div class="quick-stat-label">总训练次数</div></div>'
+      + '<div class="quick-stat"><div class="quick-stat-value">' + (state.settings.weight || '--') + '</div><div class="quick-stat-label">当前体重kg</div></div>';
+  }
+  var todayKey = todayStr();
+  var todayLog = state.trainingLog[todayKey];
+  var walkDone = todayLog && todayLog.walk;
+  var walkCard = document.getElementById('walkCheckin');
+  if (walkCard) walkCard.classList.toggle('done', walkDone);
+  var walkBtn = document.getElementById('walkBtn');
+  if (walkBtn) { walkBtn.textContent = walkDone ? '✓ 已完成' : '打卡'; walkBtn.classList.toggle('done', walkDone); }
+  var dayIdx = getTodayPlanDay();
+  var dayPlan = state.plan[dayIdx];
+  var titleEl = document.getElementById('todayWorkoutTitle');
+  var tagEl = document.getElementById('todayWorkoutTag');
+  var startBtn = document.getElementById('startWorkoutBtn');
+  var listEl = document.getElementById('todayExerciseList');
+  if (!dayPlan) {
+    if (titleEl) titleEl.textContent = '暂无计划';
+    if (tagEl) { tagEl.textContent = '设置'; tagEl.className = 'today-workout-tag tag-rest'; }
+    if (listEl) listEl.innerHTML = '<div style="padding:20px;text-align:center;color:#666;">请先完成设置，生成训练计划</div>';
+    if (startBtn) startBtn.style.display = 'none';
+    return;
+  }
+  if (startBtn) startBtn.style.display = 'block';
+  var dayLabel = 'Day ' + (dayPlan.dayNum || (dayIdx+1)) + ' · ';
+  if (dayPlan.isRest) {
+    if (titleEl) titleEl.textContent = dayLabel + dayPlan.name;
+    if (tagEl) { tagEl.textContent = '休息日'; tagEl.className = 'today-workout-tag tag-rest'; }
+    if (startBtn) { startBtn.textContent = '🧘 今日休息'; startBtn.className = 'start-workout-btn rest-day'; }
+  } else {
+    if (titleEl) titleEl.textContent = dayLabel + dayPlan.name;
+    if (tagEl) { tagEl.textContent = '训练日'; tagEl.className = 'today-workout-tag tag-training'; }
+    if (startBtn) { startBtn.textContent = '开始训练 ⚡'; startBtn.className = 'start-workout-btn'; }
+  }
+  if (listEl) {
+    listEl.innerHTML = '';
+    var completedExercises = (todayLog && todayLog.dayIdx === dayIdx && todayLog.exercises) || [];
+    for (var i = 0; i < dayPlan.exercises.length; i++) {
+      var ex = dayPlan.exercises[i];
+      var done = completedExercises[i] === true;
+      var item = document.createElement('div');
+      item.className = 'today-exercise-item';
+      item.innerHTML = '<div class="exercise-checkbox' + (done ? ' checked' : '') + '" onclick="toggleTodayExercise(' + dayIdx + ',' + i + ')"></div>'
+        + '<div class="exercise-info"><div class="exercise-name">' + ex.name + '</div>'
+        + '<div class="exercise-sets">' + ex.sets + '组 × ' + ex.reps + (typeof ex.reps === 'string' && ex.reps.indexOf('秒') === -1 ? '次' : '') + '（休息' + (ex.rest || 60) + '秒）</div></div>';
+      listEl.appendChild(item);
+    }
+
+    // ===== Update Ring Progress =====
+    var totalEx = dayPlan.exercises ? dayPlan.exercises.length : 0;
+    var doneEx = 0;
+    if (todayLog && todayLog.exercises) {
+      for (var ei = 0; ei < todayLog.exercises.length; ei++) {
+        if (todayLog.exercises[ei] === true) doneEx++;
+      }
+    }
+    var pct = totalEx > 0 ? Math.round((doneEx / totalEx) * 100) : 0;
+    var ringFill = document.getElementById('todayRingFill');
+    var ringPct = document.getElementById('todayRingPct');
+    if (ringFill) {
+      var circ = 440;
+      ringFill.style.strokeDashoffset = String(circ - (pct / 100) * circ);
+    }
+    if (ringPct) { ringPct.textContent = pct + '%'; }
+
+  // Update completion sub-text
+  var ringSub = document.getElementById('todayRingSub');
+  if (ringSub && dayPlan && dayPlan.exercises) {
+    var totalEx = dayPlan.exercises.length;
+    var doneEx = 0;
+    if (todayKey && state.trainingLog[todayKey] && state.trainingLog[todayKey].exercises) {
+      for (var ei = 0; ei < totalEx; ei++) {
+        if (state.trainingLog[todayKey].exercises[ei]) doneEx++;
+      }
+    }
+    if (totalEx > 0) {
+      ringSub.textContent = doneEx + '/' + totalEx + ' 动作完成';
+    } else {
+      ringSub.textContent = dayPlan.isRest ? '休息日' : '今日休息';
+    }
+  } else if (ringSub) {
+    ringSub.textContent = '0/0 动作完成';
+  }
+  }
+
+  // Render Day Cycle Navigation
+  renderDayCycleNav();
+
+  // Render Training Tips
+  renderTrainingTips(dayPlan);
+}
+
+// Render Day 1-9 Cycle Navigation Bar
+function renderDayCycleNav() {
+  var navEl = document.getElementById('dayCycleNav');
+  if (!navEl || !state.plan || state.plan.length === 0) return;
+
+  navEl.innerHTML = '';
+  var todayIdx = getTodayPlanDay();
+
+  for (var i = 0; i < state.plan.length; i++) {
+    var dayPlan = state.plan[i];
+    var pill = document.createElement('div');
+
+    var isToday = (i === todayIdx);
+    var isRest = dayPlan.isRest || false;
+    var dayNum = dayPlan.dayNum || (i + 1);
+
+    pill.className = 'day-pill' + (isToday ? ' active' : '') + (isRest ? ' rest' : '');
+
+    // Pill content: "DayX" label + number below
+    pill.innerHTML = '<span class="day-pill-label">Day' + dayNum + '</span><span class="day-pill-num">' + dayNum + '</span>';
+
+    (function(idx, dNum) {
+      pill.onclick = function() {
+        if (idx === todayIdx) return;
+        var targetDay = state.plan[idx];
+        showToast('Day ' + dNum + ' · ' + targetDay.name + (targetDay.isRest ? '（休息日）' : ''));
+      };
+    })(i, dayNum);
+
+    navEl.appendChild(pill);
+  }
+}
+
+// Render Today's Training Tips based on workout type
+function renderTrainingTips(dayPlan) {
+  var tipsCard = document.getElementById('todayTipsCard');
+  var tipsContent = document.getElementById('todayTipsContent');
+  
+  if (!tipsCard || !tipsContent) return;
+  
+  if (!dayPlan) {
+    tipsCard.style.display = 'none';
+    return;
+  }
+  
+  tipsCard.style.display = 'block';
+  
+  // Determine which tip set to use based on day name
+  var tipKey = '休息日';
+  if (!dayPlan.isRest) {
+    var name = dayPlan.name || '';
+    if (name.indexOf('胸') >= 0) tipKey = '胸';
+    else if (name.indexOf('背') >= 0) tipKey = '背';
+    else if (name.indexOf('肩') >= 0) tipKey = '肩';
+    else if (name.indexOf('腹') >= 0) tipKey = '腹';
+    else if (name.indexOf('腿') >= 0 || name.indexOf('臀') >= 0) tipKey = '腿+臀';
+  }
+  
+  var tips = TRAINING_TIPS[tipKey];
+  if (!tips) {
+    tipsCard.style.display = 'none';
+    return;
+  }
+  
+  var html = '';
+  // Show first 2 tips as flowing text (matching screenshot style)
+  var maxShow = Math.min(2, tips.tips.length);
+  for (var t = 0; t < maxShow; t++) {
+    html += tips.tips[t];
+    if (t < maxShow - 1) html += '。';
+  }
+  html += '。';
+  if (tips.warning) {
+    html += '<div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(0,255,106,0.15);font-size:12px;color:#ff9500;">' + tips.warning + '</div>';
+  }
+  
+  tipsContent.innerHTML = html;
+}
+
+function toggleTodayExercise(dayIdx, exIdx) {
+  var key = todayStr();
+  if (!state.trainingLog[key]) state.trainingLog[key] = { dayIdx: dayIdx, exercises: [], walk: false };
+  if (!state.trainingLog[key].exercises) state.trainingLog[key].exercises = [];
+  state.trainingLog[key].exercises[exIdx] = !state.trainingLog[key].exercises[exIdx];
+  saveState();
+  renderToday();
+  showToast('打卡更新！');
+}
+
+function toggleWalk() {
+  var key = todayStr();
+  if (!state.trainingLog[key]) state.trainingLog[key] = { dayIdx: getTodayPlanDay(), exercises: [], walk: false };
+  state.trainingLog[key].walk = !state.trainingLog[key].walk;
+  saveState();
+  renderToday();
+  showToast(state.trainingLog[key].walk ? '步行打卡完成！+300卡路里' : '已取消步行打卡');
+}
+
+// ===== Workout Active =====
+function startWorkout() {
+  var dayIdx = getTodayPlanDay();
+  var dayPlan = state.plan[dayIdx];
+  if (!dayPlan || dayPlan.isRest) { showToast('今天是休息日，好好恢复！'); return; }
+  // Check if already completed today
+  var todayKey = todayStr();
+  if (state.trainingLog[todayKey] && state.trainingLog[todayKey].completed) {
+    showToast('🎉 今天的训练已完成！明天继续加油！');
+    return;
+  }
+  // Only show warmup prompt if no progress today
+  if (!state.trainingLog[todayKey] || !state.trainingLog[todayKey].exercises || !state.trainingLog[todayKey].exercises.some(function(e) { return e; })) {
+    showToast('🔥 训练前请先热身5-10分钟，激活关节和肌肉！');
+  }
+  state.activeDayIdx = dayIdx;
+  state.activeExIdx = 0;
+  state.activeSetIdx = 0;
+  var overlay = document.getElementById('workoutActive');
+  if (overlay) overlay.classList.add('active');
+  var nav = document.getElementById('bottomNav');
+  if (nav) nav.style.display = 'none';
+  renderActiveExercise();
+  startTimer();
+}
+
+function renderActiveExercise() {
+  var dayPlan = state.plan[state.activeDayIdx];
+  if (!dayPlan || state.activeExIdx >= dayPlan.exercises.length) { completeWorkout(); return; }
+  var ex = dayPlan.exercises[state.activeExIdx];
+  var nameEl = document.getElementById('activeExName');
+  var setsEl = document.getElementById('activeExSets');
+  if (nameEl) nameEl.textContent = ex.name;
+  if (setsEl) setsEl.textContent = '第 ' + (state.activeExIdx + 1) + ' 个动作 · ' + ex.sets + '组 × ' + ex.reps;
+  var total = dayPlan.exercises.length;
+  var progText = document.getElementById('workoutProgressText');
+  if (progText) progText.textContent = (state.activeExIdx + 1) + ' / ' + total;
+  var progFill = document.getElementById('workoutProgressFill');
+  if (progFill) progFill.style.width = ((state.activeExIdx) / total * 100) + '%';
+  var setBtns = document.getElementById('activeSetBtns');
+  if (setBtns) {
+    setBtns.innerHTML = '';
+    for (var i = 0; i < ex.sets; i++) {
+      (function(idx) {
+        var btn = document.createElement('div');
+        btn.className = 'workout-set-btn';
+        btn.textContent = idx + 1;
+        btn.onclick = function() { btn.classList.toggle('done'); };
+        setBtns.appendChild(btn);
+      })(i);
+    }
+  }
+  var nextBtn = document.getElementById('activeNextBtn');
+  if (nextBtn) nextBtn.style.display = 'block';
+  var completeEl = document.getElementById('workoutComplete');
+  if (completeEl) completeEl.classList.remove('active');
+}
+
+function nextExercise() {
+  var dayPlan = state.plan[state.activeDayIdx];
+  var todayKey = todayStr();
+  if (!state.trainingLog[todayKey]) state.trainingLog[todayKey] = { dayIdx: state.activeDayIdx, exercises: [], walk: false };
+  if (!state.trainingLog[todayKey].exercises) state.trainingLog[todayKey].exercises = [];
+  state.trainingLog[todayKey].exercises[state.activeExIdx] = true;
+  saveState();
+
+  // Check if this is the last set of current exercise
+  // If not last set, just show "set complete" hint and let user continue
+  // For simplicity, we move to next exercise with rest timer
+
+  state.activeExIdx++;
+  if (state.activeExIdx >= dayPlan.exercises.length) {
+    completeWorkout();
+  } else {
+    // Start rest timer before showing next exercise
+    var nextEx = dayPlan.exercises[state.activeExIdx];
+    var restTime = nextEx.rest || 60;
+    showRestTimer(restTime);
+  }
+}
+
+function completeWorkout() {
+  var completeEl = document.getElementById('workoutComplete');
+  if (completeEl) completeEl.classList.add('active');
+  var nextBtn = document.getElementById('activeNextBtn');
+  if (nextBtn) nextBtn.style.display = 'none';
+  clearInterval(state.activeTimerInterval);
+  var statsEl = document.getElementById('completeStats');
+  if (statsEl) statsEl.textContent = '用时 ' + formatTime(state.activeTimerSec);
+  // Mark as completed
+  var todayKey = todayStr();
+  if (!state.trainingLog[todayKey]) state.trainingLog[todayKey] = { dayIdx: state.activeDayIdx, exercises: [], walk: false };
+  state.trainingLog[todayKey].completed = true;
+  saveState();
+  // Show weight prompt button if weight not recorded today
+  var weightRecorded = state.weights && state.weights.some(function(w) { return w.date === todayKey; });
+  var weightBtn = document.getElementById('completeWeightBtn');
+  if (weightBtn) weightBtn.style.display = weightRecorded ? 'none' : 'block';
+
+  // Show post-workout nutrition tip
+  setTimeout(function() {
+    showToast('🥚 训练后30分钟内补充蛋白质（如蛋白粉/鸡蛋），帮助肌肉恢复');
+  }, 1000);
+}
+
+function exitWorkout() {
+  // Confirm before exiting if workout is in progress
+  var todayKey = todayStr();
+  var hasProgress = state.trainingLog[todayKey] && state.trainingLog[todayKey].exercises && state.trainingLog[todayKey].exercises.some(function(v) { return v; });
+  if (hasProgress && !confirm('确定要退出训练吗？已完成的动作已自动保存。')) {
+    return;
+  }
+
+  // Save current progress before exiting
+  if (!state.trainingLog[todayKey]) state.trainingLog[todayKey] = { dayIdx: state.activeDayIdx, exercises: [], walk: false };
+  if (!state.trainingLog[todayKey].exercises) state.trainingLog[todayKey].exercises = [];
+  var dayPlan = state.plan[state.activeDayIdx];
+  if (dayPlan && dayPlan.exercises) {
+    for (var ei = 0; ei < state.activeExIdx; ei++) {
+      if (!state.trainingLog[todayKey].exercises[ei]) state.trainingLog[todayKey].exercises[ei] = true;
+    }
+  }
+  saveState();
+
+  clearInterval(state.activeTimerInterval);
+  var overlay = document.getElementById('workoutActive');
+  if (overlay) overlay.classList.remove('active');
+  var nav = document.getElementById('bottomNav');
+  if (nav) nav.style.display = 'flex';
+  renderToday();
+  // Prompt to record weight if not recorded today
+  var weightRecorded = state.weights && state.weights.some(function(w) { return w.date === todayKey; });
+  if (!weightRecorded) {
+    showToast('📊 要记录今日体重吗？', true, function() { switchPage('data'); });
+  }
+}
+
+function startTimer() {
+  state.activeTimerSec = 0;
+  var timerEl = document.getElementById('activeTimer');
+  if (timerEl) timerEl.textContent = '00:00';
+  clearInterval(state.activeTimerInterval);
+  state.activeTimerInterval = setInterval(function() {
+    state.activeTimerSec++;
+    var m = Math.floor(state.activeTimerSec / 60);
+    var s = state.activeTimerSec % 60;
+    if (timerEl) timerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }, 1000);
+}
+
+function resetTimer() {
+  state.activeTimerSec = 0;
+  var timerEl = document.getElementById('activeTimer');
+  if (timerEl) timerEl.textContent = '00:00';
+}
+
+function formatTime(sec) {
+  var m = Math.floor(sec / 60);
+  var s = sec % 60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+// ===== Rest Timer for between sets/exercises =====
+var restTimerInterval = null;
+var restTimerActive = false;
+
+function showRestTimer(seconds) {
+  if (restTimerActive) return; // Prevent duplicate timers
+  restTimerActive = true;
+  var wrap = document.getElementById('restTimerWrap');
+  var display = document.getElementById('restTimerDisplay');
+  var setBtns = document.getElementById('activeSetBtns');
+  var nextBtn = document.getElementById('activeNextBtn');
+  var exNameEl = document.getElementById('activeExName');
+
+  if (!wrap || !display) { renderActiveExercise(); return; }
+
+  // Hide exercise content, show rest timer
+  if (setBtns) setBtns.style.display = 'none';
+  if (nextBtn) nextBtn.style.display = 'none';
+  if (exNameEl) exNameEl.style.opacity = '0.5';
+
+  wrap.style.display = 'block';
+  display.textContent = seconds;
+
+  clearInterval(restTimerInterval);
+  restTimerInterval = setInterval(function() {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(restTimerInterval);
+      restTimerActive = false;
+      hideRestTimer();
+      renderActiveExercise();
+      showToast('💪 休息结束！保持专注，继续加油！');
+    } else {
+      display.textContent = seconds;
+    }
+  }, 1000);
+}
+
+function skipRestTimer() {
+  clearInterval(restTimerInterval);
+  restTimerActive = false;
+  hideRestTimer();
+  renderActiveExercise();
+}
+
+function hideRestTimer() {
+  var wrap = document.getElementById('restTimerWrap');
+  var exNameEl = document.getElementById('activeExName');
+  var setBtns = document.getElementById('activeSetBtns');
+  var nextBtn = document.getElementById('activeNextBtn');
+  if (wrap) wrap.style.display = 'none';
+  if (exNameEl) exNameEl.style.opacity = '1';
+  // Restore buttons visibility
+  if (setBtns) setBtns.style.display = 'flex';
+  if (nextBtn) nextBtn.style.display = 'block';
+}
+
+// ===== Plan Page =====
+function renderPlan() {
+  var badge = document.getElementById('planEquipBadge');
+  if (badge) { var eq = EQUIPMENT[state.equipment] || EQUIPMENT['band']; badge.textContent = eq.icon + ' ' + eq.name; }
+  var goalBadge = document.getElementById('planGoalBadge');
+  if (goalBadge) { var g = GOALS[state.goal] || GOALS['muscle']; goalBadge.textContent = g.icon + ' ' + g.name; }
+  var goalInfoEl = document.getElementById('planGoalInfo');
+  if (goalInfoEl && state.plan.length > 0) { goalInfoEl.textContent = state.plan[0].goalInfo || ''; }
+  var list = document.getElementById('planDayList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!state.plan || state.plan.length === 0) {
+    list.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">暂无计划，请先在设置中生成</div>';
+    return;
+  }
+  var todayDayIdx = getTodayPlanDay();
+  for (var i = 0; i < state.plan.length; i++) {
+    var day = state.plan[i];
+    var card = document.createElement('div');
+    card.className = 'plan-day-card';
+    var isToday = (i === todayDayIdx);
+    var headerHtml = '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #222;cursor:pointer;" onclick="togglePlanDay(' + i + ')">'
+      + '<div><div class="plan-day-name' + (day.isRest ? ' plan-day-rest' : '') + '">'
+      + (isToday ? '⚡ ' : '') + 'Day ' + (day.dayNum || (i+1)) + ' · ' + day.name
+      + '</div><div class="plan-day-num">' + day.exercises.length + ' 个动作' + (day.isRest ? ' · 休息日' : '') + '</div></div>'
+      + '<div style="color:var(--text-secondary);font-size:12px;" id="planArrow' + i + '">▼</div></div>';
+    var exHtml = '<div class="plan-day-exercises" id="planExercises' + i + '">';
+    for (var j = 0; j < day.exercises.length; j++) {
+      var ex = day.exercises[j];
+      exHtml += '<div class="plan-exercise-row"><div class="plan-exercise-idx">' + (j+1) + '</div>'
+        + '<div class="plan-exercise-name">' + ex.name + '</div>'
+        + '<div class="plan-exercise-sets">' + ex.sets + '×' + ex.reps + '</div></div>';
+    }
+    exHtml += '</div>';
+    card.innerHTML = headerHtml + exHtml;
+    if (isToday) card.style.borderColor = 'var(--border-green)';
+    list.appendChild(card);
+  }
+}
+
+function togglePlanDay(i) {
+  var el = document.getElementById('planExercises' + i);
+  var arrow = document.getElementById('planArrow' + i);
+  if (!el) return;
+  el.classList.toggle('expanded');
+  if (arrow) arrow.textContent = el.classList.contains('expanded') ? '▲' : '▼';
+}
+
+// ===== Equip Switch Modal =====
+var modalSelections = { equip: 'band', goal: 'muscle' };
+
+function showEquipModal() {
+  // Only initialize modalSelections from state when modal is not already active
+  var modal = document.getElementById('equipModal');
+  if (!modal || !modal.classList.contains('active')) {
+    modalSelections.equip = state.equipment;
+    modalSelections.goal = state.goal;
+  }
+  renderEquipGrid();
+  selectModalGoal(modalSelections.goal);
+  if (modal) modal.classList.add('active');
+}
+
+function renderEquipGrid() {
+  var grid = document.getElementById('modalEquipGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  var keys = ['band','dumbbell','barbell','bodyweight','kettlebell','mixed'];
+  for (var i = 0; i < keys.length; i++) {
+    var eq = EQUIPMENT[keys[i]];
+    if (!eq) continue;
+    var card = document.createElement('div');
+    card.className = 'equip-card' + (modalSelections.equip === eq.id ? ' selected' : '');
+    card.innerHTML = '<div class="equip-icon">' + eq.icon + '</div><div class="equip-name">' + eq.name + '</div>';
+    (function(eqId) {
+      card.onclick = function() { selectEquipInModal(eqId); };
+    })(eq.id);
+    grid.appendChild(card);
+  }
+}
+
+function selectEquipInModal(eqId) {
+  modalSelections.equip = eqId;
+  renderEquipGrid();
+}
+
+function selectModalGoal(goalId) {
+  modalSelections.goal = goalId;
+  var btns = document.querySelectorAll('.modal-goal-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].style.borderColor = '#333';
+    btns[i].style.background = '#1a1a1a';
+  }
+  var btnMap = { muscle:'modalGoalMuscle', strength:'modalGoalStrength', weight_loss:'modalGoalWeightLoss', endurance:'modalGoalEndurance' };
+  var btnId = btnMap[goalId];
+  if (btnId) {
+    var btn = document.getElementById(btnId);
+    if (btn) { btn.style.borderColor = 'var(--text-green)'; btn.style.background = 'rgba(0,255,106,0.1)'; }
+  }
+}
+
+function applyEquipSwitch() {
+  state.equipment = modalSelections.equip;
+  state.goal = modalSelections.goal;
+  state.plan = generatePlan(state.equipment, state.goal);
+  saveState();
+  hideEquipModal();
+  renderPlan();
+  renderToday();
+  showToast('已切换训练方案！');
+}
+
+function hideEquipModal() {
+  var modal = document.getElementById('equipModal');
+  if (modal) modal.classList.remove('active');
+}
+
+// ===== Diet Page =====
+var FOOD_DB = [
+  { name:'鸡胸肉100g', cal:133, protein:31 },
+  { name:'鸡蛋1个', cal:70, protein:6 },
+  { name:'蛋白粉1勺', cal:120, protein:24 },
+  { name:'米饭150g', cal:180, protein:4 },
+  { name:'牛肉100g', cal:250, protein:26 },
+  { name:'三文鱼100g', cal:208, protein:20 },
+  { name:'面包2片', cal:160, protein:6 },
+  { name:'牛奶250ml', cal:150, protein:8 },
+  { name:'香蕉1根', cal:105, protein:1 },
+  { name:'燕麦50g', cal:195, protein:7 },
+];
+
+function renderDiet() {
+  var dateText = state.dietDate || todayStr();
+  var d = new Date(dateText);
+  var dateEl = document.getElementById('dietDateText');
+  if (dateEl) dateEl.textContent = (d.getMonth()+1) + '月' + d.getDate() + '日';
+  var meals = state.dietMeals[dateText] || { breakfast:[], lunch:[], dinner:[], snack:[] };
+  var mealNames = { breakfast:'早餐', lunch:'午餐', dinner:'晚餐', snack:'加餐' };
+  var mealIcons = { breakfast:'🌅', lunch:'☀️', dinner:'🌙', snack:'🍪' };
+  var totalCal = 0, totalProtein = 0;
+  var list = document.getElementById('dietMealList');
+  if (!list) return;
+  list.innerHTML = '';
+  var mealKeys = ['breakfast','lunch','dinner','snack'];
+  for (var m = 0; m < mealKeys.length; m++) {
+    var mealKey = mealKeys[m];
+    var section = document.createElement('div');
+    section.className = 'diet-meal-section';
+    var mealItems = meals[mealKey] || [];
+    var mealCal = 0;
+    for (var f = 0; f < mealItems.length; f++) {
+      mealCal += mealItems[f].cal || 0;
+      totalCal += mealItems[f].cal || 0;
+      totalProtein += (mealItems[f].protein || 0);
+    }
+    var expanded = (mealKey === 'breakfast') ? 'block' : 'none';
+    var html = '<div class="diet-meal-header" onclick="toggleMealSection(\'' + mealKey + '\')">'
+      + '<div><span style="font-size:16px;margin-right:6px;">' + mealIcons[mealKey] + '</span>'
+      + '<span class="diet-meal-name">' + mealNames[mealKey] + '</span></div>'
+      + '<div class="diet-meal-cal">' + mealCal + ' 卡路里</div></div>';
+    html += '<div id="mealSection_' + mealKey + '" style="display:' + expanded + ';">';
+    for (var f = 0; f < mealItems.length; f++) {
+      var food = mealItems[f];
+      html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a;font-size:13px;">'
+        + '<span>' + food.name + '</span><span style="color:var(--text-green);">' + food.cal + ' 卡路里</span></div>';
+    }
+    html += '<div class="diet-meal-add" onclick="showAddFoodDialog(\'' + mealKey + '\')">+ 添加食物</div>';
+    html += '</div>';
+    section.innerHTML = html;
+    list.appendChild(section);
+  }
+  var quickList = document.getElementById('quickFoodList');
+  if (quickList) {
+    quickList.innerHTML = '';
+    for (var f = 0; f < FOOD_DB.length; f++) {
+      (function(food) {
+        var btn = document.createElement('button');
+        btn.className = 'quick-food-btn';
+        btn.textContent = food.name;
+        btn.onclick = function() { 
+          var selectedMeal = state.quickMealTarget || 'lunch';
+          addFood(selectedMeal, food); 
+        };
+        quickList.appendChild(btn);
+      })(FOOD_DB[f]);
+    }
+  }
+  
+  // Set default meal selection
+  state.quickMealTarget = state.quickMealTarget || 'lunch';
+  updateQuickMealUI();
+  var bmr = calcBMR();
+  var tdee = calcTDEE();
+  var recommended = (state.goal === 'weight_loss') ? tdee - 300 : tdee + 300;
+  var calText = document.getElementById('dietCalText');
+  if (calText) calText.textContent = totalCal + ' / ' + recommended + ' 卡路里';
+  var intakeText = document.getElementById('dietIntakeText');
+  if (intakeText) intakeText.textContent = '摄入: ' + totalCal + ' 卡路里';
+  var burnText = document.getElementById('dietBurnText');
+  if (burnText) burnText.textContent = '消耗: ~' + tdee + ' 卡路里';
+  var fill = document.getElementById('dietCalFill');
+  if (fill) {
+    var pct = Math.min(100, (totalCal / recommended) * 100);
+    fill.style.width = pct + '%';
+    fill.className = 'diet-cal-fill' + (totalCal > recommended + 200 ? ' surplus' : ' deficit');
+  }
+}
+
+function setQuickMeal(mealKey) {
+  state.quickMealTarget = mealKey;
+  saveState();
+  updateQuickMealUI();
+}
+
+function updateQuickMealUI() {
+  var mealKeys = ['breakfast','lunch','dinner'];
+  for (var i = 0; i < mealKeys.length; i++) {
+    var btn = document.querySelector('[data-meal="' + mealKeys[i] + '"]');
+    if (btn) {
+      var isSelected = (state.quickMealTarget === mealKeys[i]);
+      btn.style.background = isSelected ? 'rgba(0,255,106,0.15)' : '#222';
+      btn.style.borderColor = isSelected ? '#00ff6a' : '#333';
+      btn.style.color = isSelected ? '#00ff6a' : '#888';
+    }
+  }
+}
+
+function addFood(mealKey, food) {
+  var dateKey = state.dietDate || todayStr();
+  if (!state.dietMeals[dateKey]) state.dietMeals[dateKey] = { breakfast:[], lunch:[], dinner:[], snack:[] };
+  if (!state.dietMeals[dateKey][mealKey]) state.dietMeals[dateKey][mealKey] = [];
+  state.dietMeals[dateKey][mealKey].push(food);
+  saveState();
+  renderDiet();
+  showToast('已添加 ' + food.name);
+}
+
+function showAddFoodDialog(mealKey) {
+  var foodName = prompt('输入食物名称：');
+  if (!foodName) return;
+  var cal = parseInt(prompt('热量（卡路里）：')) || 0;
+  var protein = parseInt(prompt('蛋白质（g，选填）：')) || 0;
+  addFood(mealKey, { name: foodName, cal: cal, protein: protein });
+}
+
+function toggleMealSection(mealKey) {
+  var el = document.getElementById('mealSection_' + mealKey);
+  if (el) el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+}
+
+function changeDietDate(delta) {
+  var d = new Date(state.dietDate || todayStr());
+  d.setDate(d.getDate() + delta);
+  state.dietDate = d.toISOString().split('T')[0];
+  renderDiet();
+}
+
+// ===== Data Page =====
+function renderData() {
+  var canvas = document.getElementById('weightChart');
+  if (canvas && state.weights && state.weights.length > 0) {
+    drawWeightChart(canvas, state.weights);
+  }
+  var todayKey = todayStr();
+  var todayData = (state.dietMeals[todayKey] && state.dietMeals[todayKey].water) || 0;
+  state.waterIntake = todayData;
+  var waterEl = document.getElementById('waterAmount');
+  if (waterEl) waterEl.textContent = state.waterIntake;
+}
+
+
+function toggleMeasurements() {
+  var body = document.getElementById('measBody');
+  var toggle = document.getElementById('measToggle');
+  if (!body) return;
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    if (toggle) toggle.textContent = '▼';
+  } else {
+    body.style.display = 'none';
+    if (toggle) toggle.textContent = '▶';
+  }
+}
+
+function addWeight() {
+  var val = parseFloat(document.getElementById('weightInput').value);
+  if (!val || val <= 0) { showToast('请输入有效体重'); return; }
+  var todayKey = todayStr();
+  state.weights = (state.weights || []).filter(function(w) { return w.date !== todayKey; });
+  state.weights.push({ date: todayKey, value: val });
+  state.weights.sort(function(a, b) { return a.date.localeCompare(b.date); });
+  state.settings.weight = val;
+  saveState();
+  var input = document.getElementById('weightInput');
+  if (input) input.value = '';
+  renderData();
+  renderToday();
+  showToast('体重 ' + val + 'kg 已记录！');
+}
+
+function addMeasurement() {
+  var todayKey = todayStr();
+  var m = {
+    date: todayKey,
+    chest: parseFloat(document.getElementById('chestInput').value) || null,
+    arm: parseFloat(document.getElementById('armInput').value) || null,
+    waist: parseFloat(document.getElementById('waistInput').value) || null,
+    thigh: parseFloat(document.getElementById('thighInput').value) || null,
+  };
+  state.measurements = (state.measurements || []).filter(function(x) { return x.date !== todayKey; });
+  state.measurements.push(m);
+  state.measurements.sort(function(a, b) { return a.date.localeCompare(b.date); });
+  saveState();
+  showToast('围度已记录！');
+}
+
+function addWater(amount) {
+  var todayKey = todayStr();
+  if (!state.dietMeals[todayKey]) state.dietMeals[todayKey] = { breakfast:[], lunch:[], dinner:[], snack:[], water:0 };
+  state.dietMeals[todayKey].water = (state.dietMeals[todayKey].water || 0) + amount;
+  state.waterIntake = state.dietMeals[todayKey].water;
+  saveState();
+  renderData();
+  showToast('+' + amount + 'ml 饮水已记录');
+}
+
+// ===== Simple Canvas Chart =====
+function drawWeightChart(canvas, weights) {
+  if (!canvas || !weights || weights.length < 1) return;
+  var ctx = canvas.getContext('2d');
+  var rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: 300, height: 200 };
+  var w = rect.width || 300;
+  var h = 200;
+  canvas.width = w * 2;
+  canvas.height = h * 2;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.scale(2, 2);
+  var padding = { top: 20, right: 10, bottom: 30, left: 35 };
+  var chartW = w - padding.left - padding.right;
+  var chartH = h - padding.top - padding.bottom;
+  ctx.clearRect(0, 0, w, h);
+  var values = weights.map(function(x) { return x.value; });
+  var minV = Math.min.apply(null, values) - 1;
+  var maxV = Math.max.apply(null, values) + 1;
+  var rangeV = maxV - minV || 1;
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 0.5;
+  for (var i = 0; i <= 4; i++) {
+    var y = padding.top + (chartH * i / 4);
+    ctx.beginPath();
+    ctx.moveTo(padding.left, y);
+    ctx.lineTo(w - padding.right, y);
+    ctx.stroke();
+    ctx.fillStyle = '#888';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText((maxV - rangeV * i / 4).toFixed(1), padding.left - 5, y + 3);
+  }
+  ctx.beginPath();
+  ctx.strokeStyle = '#00ff6a';
+  ctx.lineWidth = 2;
+  ctx.shadowColor = 'rgba(0,255,106,0.5)';
+  ctx.shadowBlur = 6;
+  for (var i = 0; i < weights.length; i++) {
+    var x = padding.left + (i / Math.max(1, weights.length - 1)) * chartW;
+    var y = padding.top + chartH * (1 - (weights[i].value - minV) / rangeV);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+  for (var i = 0; i < weights.length; i++) {
+    var x = padding.left + (i / Math.max(1, weights.length - 1)) * chartW;
+    var y = padding.top + chartH * (1 - (weights[i].value - minV) / rangeV);
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#00ff6a';
+    ctx.fill();
+  }
+  if (state.settings.goalWeight) {
+    var goalY = padding.top + chartH * (1 - (state.settings.goalWeight - minV) / rangeV);
+    if (goalY >= padding.top && goalY <= padding.top + chartH) {
+      ctx.strokeStyle = '#ff6a00';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([5, 3]);
+      ctx.beginPath();
+      ctx.moveTo(padding.left, goalY);
+      ctx.lineTo(w - padding.right, goalY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#ff6a00';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('目标 ' + state.settings.goalWeight + 'kg', padding.left + 5, goalY - 5);
+    }
+  }
+  ctx.fillStyle = '#888';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  for (var i = 0; i < weights.length; i++) {
+    if (i % Math.ceil(weights.length / 5) === 0 || i === weights.length - 1) {
+      var x = padding.left + (i / Math.max(1, weights.length - 1)) * chartW;
+      ctx.fillText(weights[i].date.slice(5), x, h - 5);
+    }
+  }
+}
+
+// ===== Stats Page =====
+function renderStats() {
+  var streak = getStreak();
+  var total = getTotalCompleted();
+  var streakEl = document.getElementById('statsStreak');
+  if (streakEl) streakEl.textContent = streak;
+  var totalEl = document.getElementById('statsTotal');
+  if (totalEl) totalEl.textContent = total;
+  var weekComplete = getWeekCompletedCount();
+  var weekRate = Math.round((weekComplete / Math.min(7, (state.plan || []).length || 1)) * 100);
+  var weekRateEl = document.getElementById('statsWeekRate');
+  if (weekRateEl) weekRateEl.textContent = weekRate + '%';
+  var monthComplete = getMonthCompletedCount();
+  var now = new Date();
+  var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  var monthRateVal = Math.round((monthComplete / daysInMonth) * 100);
+  var monthRateEl = document.getElementById('statsMonthRate');
+  if (monthRateEl) monthRateEl.textContent = monthRateVal + '%';
+  if (state.weights && state.weights.length >= 2) {
+    var first = state.weights[0].value;
+    var last = state.weights[state.weights.length - 1].value;
+    var change = (last - first).toFixed(1);
+    var changeEl = document.getElementById('statsWeightChange');
+    if (changeEl) {
+      changeEl.textContent = (change >= 0 ? '+' : '') + change + 'kg';
+      changeEl.style.color = change > 0 ? '#ff6a00' : '#00ff6a';
+    }
+  }
+
+  // ===== Update Ring Fills =====
+  // Streak ring: max 30 days shown on ring, cap at 100%
+  var ringStreakFill = document.getElementById('ringStreakFill');
+  if (ringStreakFill) {
+    var streakPct = Math.min(100, streak * 3.33); // 30 days = 100%
+    ringStreakFill.style.strokeDashoffset = String(264 - (streakPct / 100) * 264);
+  }
+
+  // Total workouts ring: max 50 = 100%
+  var ringTotalFill = document.getElementById('ringTotalFill');
+  if (ringTotalFill) {
+    var totalPct = Math.min(100, total * 2);
+    ringTotalFill.style.strokeDashoffset = String(264 - (totalPct / 100) * 264);
+  }
+
+  // Week rate ring: direct %
+  var ringWeekFill = document.getElementById('ringWeekFill');
+  if (ringWeekFill) {
+    ringWeekFill.style.strokeDashoffset = String(264 - (weekRate / 100) * 264);
+  }
+
+  // Week rate small label
+  var weekRateSmallEl = document.getElementById('statsWeekRateSmall');
+  if (weekRateSmallEl) weekRateSmallEl.textContent = weekRate + '%';
+
+  // Weight change ring: show as +/- offset from center
+  var ringWeightFill = document.getElementById('ringWeightFill');
+  if (ringWeightFill && state.weights && state.weights.length >= 2) {
+    var wFirst = state.weights[0].value;
+    var wLast = state.weights[state.weights.length - 1].value;
+    var wChange = wLast - wFirst;
+    // Map -5kg to +5kg onto ring range
+    var wPct = 50 + (wChange / 5) * 50; // -5kg=0%, 0kg=50%, +5kg=100%
+    wPct = Math.max(0, Math.min(100, wPct));
+    ringWeightFill.style.strokeDashoffset = String(264 - (wPct / 100) * 264);
+    ringWeightFill.style.stroke = wChange > 0 ? '#ff6a00' : (wChange < 0 ? '#00ff6a' : '#888');
+  }
+
+  var weekGrid = document.getElementById('statsWeekGrid');
+  if (weekGrid) {
+    weekGrid.innerHTML = '';
+    var weekDays = ['日','一','二','三','四','五','六'];
+    for (var i = 0; i < 7; i++) {
+      var d = new Date();
+      d.setDate(d.getDate() - d.getDay() + i);
+      var key = d.toISOString().split('T')[0];
+      var hasLog = state.trainingLog[key] && state.trainingLog[key].exercises && state.trainingLog[key].exercises.some(function(e) { return e; });
+      var cell = document.createElement('div');
+      cell.style.cssText = 'aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-direction:column;gap:2px;'
+        + 'background:' + (hasLog ? 'rgba(0,255,106,0.15)' : '#1a1a1a') + ';'
+        + 'border:1px solid ' + (hasLog ? 'rgba(0,255,106,0.3)' : '#333') + ';'
+        + 'color:' + (hasLog ? 'var(--text-green)' : '#666') + ';';
+      cell.innerHTML = '<div style="font-size:10px;color:#888;">' + weekDays[i] + '</div><div>' + (hasLog ? '✓' : '—') + '</div>';
+      weekGrid.appendChild(cell);
+    }
+  }
+}
+
+// ===== Helpers =====
+function getStreak() {
+  var streak = 0;
+  var d = new Date();
+  while (true) {
+    var key = d.toISOString().split('T')[0];
+    var log = state.trainingLog[key];
+    if (log && log.exercises && log.exercises.some(function(e) { return e; })) {
+      streak++;
+      d.setDate(d.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function getTotalCompleted() {
+  return Object.keys(state.trainingLog).filter(function(key) {
+    var l = state.trainingLog[key];
+    return l && l.exercises && l.exercises.some(function(e) { return e; });
+  }).length;
+}
+
+function getWeekCompletedCount() {
+  var count = 0;
+  var d = new Date();
+  d.setDate(d.getDate() - d.getDay());
+  for (var i = 0; i < 7; i++) {
+    var key = d.toISOString().split('T')[0];
+    var log = state.trainingLog[key];
+    if (log && log.exercises && log.exercises.some(function(e) { return e; })) count++;
+    d.setDate(d.getDate() + 1);
+  }
+  return count;
+}
+
+function getMonthCompletedCount() {
+  var count = 0;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth();
+  var keys = Object.keys(state.trainingLog);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var d2 = new Date(key);
+    if (d2.getFullYear() === year && d2.getMonth() === month) {
+      var log = state.trainingLog[key];
+      if (log && log.exercises && log.exercises.some(function(e) { return e; })) count++;
+    }
+  }
+  return count;
+}
+
+function calcBMR() {
+  var settings = state.settings || {};
+  var birthYear = settings.birthYear || 1987;
+  var age = new Date().getFullYear() - birthYear;
+  var height = settings.height || 170;
+  var weight = settings.weight || 65;
+  var gender = settings.gender || 'male';
+  if (gender === 'male') {
+    return Math.round(10 * weight + 6.25 * height - 5 * age + 5);
+  } else {
+    return Math.round(10 * weight + 6.25 * height - 5 * age - 161);
+  }
+}
+
+function calcTDEE() {
+  return Math.round(calcBMR() * 1.5) + 300;
+}
+
+// ===== Settings =====
+function renderSettings() {
+  var el;
+  el = document.getElementById('settingBirthYear'); if (el) el.value = (state.settings || {}).birthYear || '';
+  el = document.getElementById('settingHeight');    if (el) el.value = (state.settings || {}).height || '';
+  el = document.getElementById('settingWeight');    if (el) el.value = (state.settings || {}).weight || '';
+  el = document.getElementById('settingGoalWeight'); if (el) el.value = (state.settings || {}).goalWeight || '';
+  el = document.getElementById('settingEquip');    if (el) el.textContent = (EQUIPMENT[state.equipment] || {}).name || '';
+  el = document.getElementById('settingGoal');      if (el) el.textContent = (GOALS[state.goal] || {}).name || '';
+  setGender((state.settings || {}).gender || 'male');
+}
+
+function setGender(g) {
+  state.settings.gender = g;
+  var btnM = document.getElementById('genderMale');
+  var btnF = document.getElementById('genderFemale');
+  if (btnM) {
+    btnM.style.borderColor = (g === 'male') ? 'var(--text-green)' : '#333';
+    btnM.style.background = (g === 'male') ? 'rgba(0,255,106,0.1)' : '#1a1a1a';
+  }
+  if (btnF) {
+    btnF.style.borderColor = (g === 'female') ? 'var(--text-green)' : '#333';
+    btnF.style.background = (g === 'female') ? 'rgba(0,255,106,0.1)' : '#1a1a1a';
+  }
+  saveState();
+}
+
+function saveSettings() {
+  var el;
+  el = document.getElementById('settingBirthYear');  if (el) state.settings.birthYear = parseInt(el.value) || 1987;
+  el = document.getElementById('settingHeight');     if (el) state.settings.height = parseInt(el.value) || 170;
+  el = document.getElementById('settingWeight');     if (el) state.settings.weight = parseFloat(el.value) || 65;
+  el = document.getElementById('settingGoalWeight'); if (el) state.settings.goalWeight = parseFloat(el.value) || 75;
+  saveState();
+  showToast('设置已保存！');
+}
+
+// ===== Data Export / Reset =====
+function exportData() {
+  var data = { state: state, exportDate: todayStr(), version:'3.0' };
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = '怪兽训练备份_' + todayStr() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('数据已导出！');
+}
+
+function resetData() {
+  if (confirm('确定要重置所有数据吗？此操作不可撤销！')) {
+    localStorage.removeItem('monsterPlanState');
+    location.reload();
+  }
+}
+
+// ===== PWA =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function() {});
+}
+
+// ===== Start =====
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+  ['settingBirthYear','settingHeight','settingWeight','settingGoalWeight'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', saveSettings);
+  });
+});
+</script>
+</body>
+</html>
