@@ -67,7 +67,7 @@ body {
   flex:1 1 auto;
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
-  padding-bottom: 140px !important; /* 增加底部间距，确保最后一个项目不被导航栏遮挡 */
+  padding-bottom:120px;
   min-height:0; /* 关键：允许flex子元素收缩并滚动 */
 }
 /* ===== Onboarding ===== */
@@ -357,12 +357,20 @@ body {
 .btn-reset { background:none; border:1px solid #ff4444; color:#ff4444; }
 /* ===== Bottom Nav ===== */
 .bottom-nav {
-  display:flex; height:var(--nav-height); background:var(--bg-secondary);
+  display:flex;
+  height:var(--nav-height);
+  background:var(--bg-secondary);
   border-top:1px solid #222;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5px); /* 增加额外间距 */
   flex-shrink:0;
-  max-width:480px; margin:0 auto; width:100%;
+  max-width:480px;
+  margin:0 auto;
+  width:100%;
   box-sizing:border-box;
+  position: fixed; /* 固定定位，确保完全贴底 */
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .nav-item {
   flex:1; display:flex; flex-direction:column; align-items:center;
